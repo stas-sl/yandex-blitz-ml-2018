@@ -1,0 +1,6 @@
+.ipynb_checkpoints
+catboost_info
+__pycache__
+output/*
+
+!.keep
