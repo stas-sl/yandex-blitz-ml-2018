@@ -181,7 +181,7 @@ Implementation: [l.ipynb](l.ipynb)
 
 # M. Pairwise ranking
 
-This task might look similar to [H. Restaurants](#H.-Restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each <img src="assets/77a3b857d53fb44e33b53e4c8b68351a.svg" align=middle width=5.663225699999989pt height=21.68300969999999pt/>-th object's score as a parameter/weight <img src="assets/73cff7830c7881710ad86fddbe27bb4c.svg" align=middle width=75.10183559999999pt height=24.65753399999998pt/>. 
+This task might look similar to [H. Restaurants](#h-restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each <img src="assets/77a3b857d53fb44e33b53e4c8b68351a.svg" align=middle width=5.663225699999989pt height=21.68300969999999pt/>-th object's score as a parameter/weight <img src="assets/73cff7830c7881710ad86fddbe27bb4c.svg" align=middle width=75.10183559999999pt height=24.65753399999998pt/>. 
 
 Thus the task can written as:
 

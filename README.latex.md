@@ -183,7 +183,7 @@ Implementation: [l.ipynb](l.ipynb)
 
 # M. Pairwise ranking
 
-This task might look similar to [H. Restaurants](#H.-Restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each $i$-th object's score as a parameter/weight $f(a_i)=w_i$. 
+This task might look similar to [H. Restaurants](#h-restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each $i$-th object's score as a parameter/weight $f(a_i)=w_i$. 
 
 Thus the task can written as:
 
