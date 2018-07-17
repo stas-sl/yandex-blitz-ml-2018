@@ -169,7 +169,7 @@ The most important observation in this task is similarity between **ssid** and *
 
 <table>  <thead>    <tr>      <th></th>      <th>names</th>      <th>ssid</th>    </tr>  </thead>  <tbody>    <tr>      <th>18</th>      <td>["Аэропорт Толмачево, бухгалтерия", "Толмачево"]</td>      <td>Tolmachevo-MTS-Free</td>    </tr>    <tr>      <th>38</th>      <td>["Kontrolmatik"]</td>      <td>Kontrolmatik_Staff</td>    </tr>    <tr>      <th>49</th>      <td>["ПКВ Моторс", "Pkw Motors", "Pkw Motors", "Те...</td>      <td>PKW Guests</td>    </tr>    <tr>      <th>77</th>      <td>["Техцентр Юста", "Tekhtsentr Yusta", "Юста", ...</td>      <td>YUSTA</td>    </tr>    <tr>      <th>94</th>      <td>["Респект Авто", "Автосервис"]</td>      <td>RespectAuto</td>    </tr>  </tbody></table>
 
-While **ssid** contain mostly latin characters, organization names might be in other languages like russian, so we need to perform some transliteration before calculating similarity. After that we will compute similarity between 2 strings as number of n-grams ocurred in both strings. We will use **n=1..8**. Also we'll perform the same operation for **ssid** and **urls** fields, because **urls** might also include some substrings from **ssid**.
+While **ssid** contains mostly latin characters, organization names might be in other languages like russian, so we need to perform some transliteration before calculating similarity. After that we will compute similarity between 2 strings as number of n-grams ocurred in both strings. We will use **n=1..8**. Also we'll compute similarity for **ssid** and **urls** fields, because **urls** might also include some substrings from **ssid**.
 
 Other features are more obvious: we calculate distance between user and organization and perform one-hot encoding of **rubrics**. Also we feed some fields as is, like **has_wifi**, **publishing_status**.
 
@@ -181,7 +181,21 @@ Implementation: [l.ipynb](l.ipynb)
 
 # M. Pairwise ranking
 
-TODO
+This task might look similar to [H. Restaurants](#H.-Restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each <img src="assets/77a3b857d53fb44e33b53e4c8b68351a.svg" align=middle width=5.663225699999989pt height=21.68300969999999pt/>-th object's score as a parameter/weight <img src="assets/73cff7830c7881710ad86fddbe27bb4c.svg" align=middle width=75.10183559999999pt height=24.65753399999998pt/>. 
+
+Thus the task can written as:
+
+<p align="center"><img src="assets/355bfd87df3626f157eeb4db4bc56c71.svg" align=middle width=519.3259978499999pt height=34.3600389pt/></p>
+
+Or in vectorized form:
+
+<p align="center"><img src="assets/0fb40f1a67fc14bfc396806d77e0700e.svg" align=middle width=96.17928045pt height=18.7598829pt/></p>
+
+where <img src="assets/6feb3bad07ddeea39e0e6487b370ddd2.svg" align=middle width=141.53261429999998pt height=24.65753399999998pt/> - vector of all objects' scores and <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=14.908688849999992pt height=22.465723500000017pt/> - is <img src="assets/63b142315f480db0b3ff453d62cc3e7f.svg" align=middle width=44.39116769999999pt height=19.1781018pt/> design matrix, where each row contains only 2 non-zero elements, namely <img src="assets/e33baa1a785610766d8c96a85ea0d929.svg" align=middle width=66.84022784999999pt height=21.18721440000001pt/> and <img src="assets/a6b6803e79a52d9c48fbe3a16bbbed28.svg" align=middle width=79.62566204999999pt height=21.18721440000001pt/> for all <img src="assets/f68112419890e1aaee4b3945368ad473.svg" align=middle width=63.931838849999984pt height=21.68300969999999pt/>.
+
+There is always <img src="assets/034d0a6be0424bffe9a6e7ac9236c0f5.svg" align=middle width=8.219209349999991pt height=21.18721440000001pt/> on the right side of equation because first object <img src="assets/23a9f1f890788fca12299080b7ddeeb9.svg" align=middle width=19.89259964999999pt height=14.15524440000002pt/> is always preferred over the second <img src="assets/91cfda11becf7d409e7826d26965b2e0.svg" align=middle width=19.89259964999999pt height=14.15524440000002pt/>.
+
+After those preparations we can just fit logistic regression to obtain scores <img src="assets/c2a29561d89e139b3c7bffe51570c3ce.svg" align=middle width=16.41940739999999pt height=14.15524440000002pt/>.
 
 Implementation: [m.py](m.py)
 

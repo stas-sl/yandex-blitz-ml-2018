@@ -171,7 +171,7 @@ The most important observation in this task is similarity between **ssid** and *
 
 <table>  <thead>    <tr>      <th></th>      <th>names</th>      <th>ssid</th>    </tr>  </thead>  <tbody>    <tr>      <th>18</th>      <td>["Аэропорт Толмачево, бухгалтерия", "Толмачево"]</td>      <td>Tolmachevo-MTS-Free</td>    </tr>    <tr>      <th>38</th>      <td>["Kontrolmatik"]</td>      <td>Kontrolmatik_Staff</td>    </tr>    <tr>      <th>49</th>      <td>["ПКВ Моторс", "Pkw Motors", "Pkw Motors", "Те...</td>      <td>PKW Guests</td>    </tr>    <tr>      <th>77</th>      <td>["Техцентр Юста", "Tekhtsentr Yusta", "Юста", ...</td>      <td>YUSTA</td>    </tr>    <tr>      <th>94</th>      <td>["Респект Авто", "Автосервис"]</td>      <td>RespectAuto</td>    </tr>  </tbody></table>
 
-While **ssid** contain mostly latin characters, organization names might be in other languages like russian, so we need to perform some transliteration before calculating similarity. After that we will compute similarity between 2 strings as number of n-grams ocurred in both strings. We will use **n=1..8**. Also we'll perform the same operation for **ssid** and **urls** fields, because **urls** might also include some substrings from **ssid**.
+While **ssid** contains mostly latin characters, organization names might be in other languages like russian, so we need to perform some transliteration before calculating similarity. After that we will compute similarity between 2 strings as number of n-grams ocurred in both strings. We will use **n=1..8**. Also we'll compute similarity for **ssid** and **urls** fields, because **urls** might also include some substrings from **ssid**.
 
 Other features are more obvious: we calculate distance between user and organization and perform one-hot encoding of **rubrics**. Also we feed some fields as is, like **has_wifi**, **publishing_status**.
 
@@ -183,7 +183,21 @@ Implementation: [l.ipynb](l.ipynb)
 
 # M. Pairwise ranking
 
-TODO
+This task might look similar to [H. Restaurants](#H.-Restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each $i$-th object's score as a parameter/weight $f(a_i)=w_i$. 
+
+Thus the task can written as:
+
+$$\sigma(w_{a_{i1}}-w_{a_{i2}}) = 1,\ i=1...m,\text{ where }\sigma(x) = \frac{1}{1+e^{-x}}\text{ - sigmoid function }$$
+
+Or in vectorized form:
+
+$$\sigma(Xw^T) = \mathbf{1}, $$
+
+where $w=(w_1, w_2, ..., w_n)$ - vector of all objects' scores and $X$ - is $m\times n$ design matrix, where each row contains only 2 non-zero elements, namely $x_{i,a_{i1}}=1$ and $x_{i,a_{i2}}=-1$ for all $i=1...m$.
+
+There is always $1$ on the right side of equation because first object $a_{i1}$ is always preferred over the second $a_{i2}$.
+
+After those preparations we can just fit logistic regression to obtain scores $w_i$.
 
 Implementation: [m.py](m.py)
 
