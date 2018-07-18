@@ -131,7 +131,7 @@ We see that features 5 and 95 are the most important ones. Let's look at them an
 
 <table>  <thead> <tr style="text-align: right;">      <th></th>      <th>5</th>      <th>95</th>      <th>100</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>1</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>2</th>      <td>0</td>      <td>0</td>      <td>0</td>    </tr>    <tr>      <th>3</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>4</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>5</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>6</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>7</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>8</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>9</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>  </tbody></table>
 
-Looks like XOR: $target = feature_5 \oplus feature_{95}$. Double-checking on the whole dataset confirms out hypothesis.
+Looks like XOR: $target = feature_5 \oplus feature_{95}$. Double-checking on the whole dataset confirms our hypothesis.
 
 Implementation: [i.ipynb](i.ipynb)
 
@@ -167,7 +167,7 @@ Implementation: [k_test.ipynb](k_test.ipynb), [k_bytearray.py](k_bytearray.py), 
 
 # L. Wi-Fi
 
-The most important observation in this task is similarity between **ssid** and **organization name** for those rows having *target=1*. Here are just a few samples with *target=1*:
+The most important observation in this task is similarity between **ssid** and **organization name** for those rows where *target=1*. Here are just a few samples with *target=1*:
 
 <table>  <thead>    <tr>      <th></th>      <th>names</th>      <th>ssid</th>    </tr>  </thead>  <tbody>    <tr>      <th>18</th>      <td>["Аэропорт Толмачево, бухгалтерия", "Толмачево"]</td>      <td>Tolmachevo-MTS-Free</td>    </tr>    <tr>      <th>38</th>      <td>["Kontrolmatik"]</td>      <td>Kontrolmatik_Staff</td>    </tr>    <tr>      <th>49</th>      <td>["ПКВ Моторс", "Pkw Motors", "Pkw Motors", "Те...</td>      <td>PKW Guests</td>    </tr>    <tr>      <th>77</th>      <td>["Техцентр Юста", "Tekhtsentr Yusta", "Юста", ...</td>      <td>YUSTA</td>    </tr>    <tr>      <th>94</th>      <td>["Респект Авто", "Автосервис"]</td>      <td>RespectAuto</td>    </tr>  </tbody></table>
 
@@ -185,7 +185,7 @@ Implementation: [l.ipynb](l.ipynb)
 
 This task might look similar to [H. Restaurants](#h-restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each $i$-th object's score as a parameter/weight $f(a_i)=w_i$. 
 
-Thus the task can written as:
+Thus our task can rewritten as:
 
 $$\sigma(w_{a_{i1}}-w_{a_{i2}}) = 1,\ i=1...m,\text{ where }\sigma(x) = \frac{1}{1+e^{-x}}\text{ - sigmoid function }$$
 
