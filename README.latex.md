@@ -217,7 +217,35 @@ Implementation: [n.py](n.py)
 
 # O. SVD recommender
 
-TODO
+This task is classical recommender system. It is well known since Netflix competition in 2006-2009. One
+of the competitors Simon Funk has [really nice description](http://sifter.org/simon/journal/20061211.html) of his method that uses SGD to find matrix factorization. It is good, because we don't need to deal with huge sparse matrices.
+
+Another useful resource was [suprise](http://surpriselib.com/) library. It does exactly what is required in our task and 
+it has convenient methods to get sample data for testing purposes. We will try to implement our own algorithm
+to find matrix factorization and compare the results with those received using this library.
+
+The algorithm is pretty straightforward. The [idea](http://surprise.readthedocs.io/en/stable/matrix_factorization.html#surprise.prediction_algorithms.matrix_factorization.SVD) is to represent ratings as $\hat{r}_{um} = \mu + b_u + b_m + q_m^Tp_u$
+
+Where:
+
+$b_u$ - per user average rating minus global average, vector of size $U$<br>
+$b_m$ - per movie average rating minus global average, vector of size $M$<br>
+$p_u$ - user embedding, vector of size $d$ (number of factors)<br>
+$q_m$ - movie embedding, vector of size $d$ (number of factors)<br>
+
+We initialize these variables with some random values and then iterate over each known user-movie-raiting tuples and compute 
+error. Then we update just a little bit all parameters to minimize the error:
+
+$$
+\begin{array}{lll}
+b_u & \leftarrow & b_u + \gamma (e_{um} - \lambda b_u)\\
+b_m & \leftarrow & b_m + \gamma (e_{um} - \lambda b_m)\\
+p_u & \leftarrow & p_u + \gamma (e_{um} \cdot q_m - \lambda p_u) \\
+q_m & \leftarrow & q_m + \gamma (e_{um} \cdot p_u - \lambda q_m)
+\end{array}
+$$
+
+Where $e_{um} = r_{um} - \hat{r}_{um}$, $\lambda$ - regularization parameter, $\gamma$ - learning rate.
 
 Implementation: [o_test.ipynb](o_test.ipynb), [o.py](o.py)
 

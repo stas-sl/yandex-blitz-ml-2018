@@ -215,7 +215,28 @@ Implementation: [n.py](n.py)
 
 # O. SVD recommender
 
-TODO
+This task is classical recommender system. It is well known since Netflix competition in 2006-2009. One
+of the competitors Simon Funk has [really nice description](http://sifter.org/simon/journal/20061211.html) of his method that uses SGD to find matrix factorization. It is good, because we don't need to deal with huge sparse matrices.
+
+Another useful resource was [suprise](http://surpriselib.com/) library. It does exactly what is required in our task and 
+it has convenient methods to get sample data for testing purposes. We will try to implement our own algorithm
+to find matrix factorization and compare the results with those received using this library.
+
+The algorithm is pretty straightforward. The [idea](http://surprise.readthedocs.io/en/stable/matrix_factorization.html#surprise.prediction_algorithms.matrix_factorization.SVD) is to represent ratings as <img src="assets/d42d1a09987f1cb87139da3ec00b2aad.svg" align=middle width=213.960418pt height=31.0090858pt/>
+
+Where:
+
+<img src="assets/f7115ca4804f002d341b17739b30a8a2.svg" align=middle width=16.624153649999993pt height=25.59845739999999pt/> - per user average rating minus global average, vector of size <img src="assets/6bac6ec50c01592407695ef84f457232.svg" align=middle width=14.59365284999999pt height=25.188841500000024pt/><br>
+<img src="assets/f8fd3079e1d6ddd6a40ffb421d3e5ed1.svg" align=middle width=20.988693999999988pt height=25.59845739999999pt/> - per movie average rating minus global average, vector of size <img src="assets/fb97d38bcc19230b0acd442e17db879c.svg" align=middle width=19.89000859999999pt height=25.188841500000024pt/><br>
+<img src="assets/13086b9ea21e25dc5977f88758215527.svg" align=middle width=17.98729099999999pt height=15.871031600000025pt/> - user embedding, vector of size <img src="assets/2103f85b8b1477f430fc407cad462224.svg" align=middle width=9.59305104999999pt height=25.59845739999999pt/> (number of factors)<br>
+<img src="assets/001683f492003af3c5898ea899494eb0.svg" align=middle width=21.30657579999999pt height=15.871031600000025pt/> - movie embedding, vector of size <img src="assets/2103f85b8b1477f430fc407cad462224.svg" align=middle width=9.59305104999999pt height=25.59845739999999pt/> (number of factors)<br>
+
+We initialize these variables with some random values and then iterate over each known user-movie-raiting tuples and compute 
+error. Then we update just a little bit all parameters to minimize the error:
+
+<p align="center"><img src="assets/52fc4c184fe34f060780915a8a54924e.svg" align=middle width=266.19900120000005pt height=84.7820664pt/></p>
+
+Where <img src="assets/9be29c69a1e76559ef3b12be5c5f459b.svg" align=middle width=139.53533055pt height=25.59845739999999pt/>, <img src="assets/fd8be73b54f5436a5cd2e73ba9b6bfa9.svg" align=middle width=10.751395249999991pt height=25.59845739999999pt/> - regularization parameter, <img src="assets/11c596de17c342edeed29f489aa4b274.svg" align=middle width=10.566169549999989pt height=15.871031600000025pt/> - learning rate.
 
 Implementation: [o_test.ipynb](o_test.ipynb), [o.py](o.py)
 
