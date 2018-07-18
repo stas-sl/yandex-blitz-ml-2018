@@ -203,7 +203,15 @@ Implementation: [m.py](m.py)
 
 # N. Coins
 
-TODO
+Well, the first straightforward idea was simply to calculate frequency of getting heads up $\frac{m_i}{k_i}$ and sort coins by this number. But, unfortunately, it didn't work. The problem is that if we have 2 coins $i$ and $j$ with $m_i=0, k_i=1$ and $m_j=0, k_j=50$ then we will get $\frac{0}{1}=\frac{0}{50}=0$. Which means that we will consider both of the coins to have equally low chance of getting heads up $p_i=p_j=0$. Though, intuitively, of course, it doesn't seem right: if we toss a coin only single time and didn't get heads up, we shouldn't be so confident that we will never get it at all, though if we didn't get a single heads up after 50 tosses, well, chances to get a one are really low. At this point we should probably start to realize that Bayesian statistics was invented for a reason. 
+
+Unfortunately my understanding of Bayessian statistics not as profound as I'd like, but the idea is that instead of estimating a single number $p_i$ we deal with whole distibution of all possible values of $p_i$. In order to do this, we choose some plausible prior distribution, which in case if we don't have any specific information, we may choose as $U(0, 1)$ - standard uniform distibution, i.e. all $p_i$ are equally likely. Then after each toss we update the resulting distribution (a posteori) according to the observed outcome, thus the initial distibution is gradually shifting towards the true distribution. In the end to be able to compare a posteori distribution of different coins, we still have to come up to a single number (point estimate), but this time we  have some options how to calculate it from whole distibution. The most common approaches are to select mode (maximum a posteori) or mean (expected value) of the distibution. Intuitively expected value contains more information about the distribution because it is integral over all possible values, while maximum value is just a single point. So we'll use mean of the distribution as its point estimate.
+
+That was an overall justification, now let's get to our task. According to wikipedia articles [Checking whether a coin is fair](https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair) and [Beta distribution](https://en.wikipedia.org/wiki/Beta_distribution) we know that the a posterior distribution of $p_i$ after getting $h_i=m_i$ heads and $t_i=k_i-m_i$ tails is in fact a $Beta$ distribution: $p_i \sim Beta(h_i + 1, t_i + 1) = Beta(m_i+1, k_i-m_i+1)$ with probability density function:
+
+$$f(p_i\ \mid\ H=h_i,T=t_i)=\frac{p_i^{h_i} (1-p_i)^{t_i}}{B(h_i+1, t_i+1)}\text{, where } B(\alpha, \beta)\text{ - is }Beta\text{ function}$$
+
+From the properties of $Beta$ distribution we know that its expected value is $\frac{\alpha}{\alpha+\beta}=\frac{m_i+1}{k_i+2}$, while its mode is $\frac{\alpha-1}{\alpha + \beta -2} = \frac{m_i}{k_i}$. So if we would use mode instead of mean we would get the same results as our initial idea that didn't work.
 
 Implementation: [n.py](n.py)
 
