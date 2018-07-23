@@ -242,7 +242,27 @@ Implementation: [o_test.ipynb](o_test.ipynb), [o.py](o.py)
 
 # P. Adversarial attack (white-box)
 
-TODO
+![p](assets/p.svg)
+
+The idea is to start with the source image and incrementally update it a little bit in opposite gradient (w.r.t. input image) direction, so that with each iteration the model predicts higher and higher probability that the image belongs to the target class. As long as we know the underlying model is plain linear classifier with softmax activation, we can analytically compute the gradient of the loss function w.r.t. the input.
+
+The loss function that we are going to minimize is:
+
+<p align="center"><img src="assets/2a1465ceb2e667bfb0fadb45da84ae23.svg" align=middle width=376.86357215pt height=130.39180915000003pt/></p>
+
+Where <img src="assets/c97fba47d1059b5c2d3fa5f52768a2a7.svg" align=middle width=10.533774199999991pt height=20.929253500000016pt/> - is original the image, <img src="assets/4f4f4e395762a3af4575de74c019ebb5.svg" align=middle width=6.655624749999991pt height=22.672930299999983pt/> - target class, <img src="assets/227f4d8d12b0de49c4ca84f74fa98023.svg" align=middle width=15.483926499999992pt height=15.871031600000025pt/> - <img src="assets/36b5afebdba34564d884d347484ac0c7.svg" align=middle width=8.645012999999988pt height=24.311253299999994pt/>-th output of softmax, <img src="assets/fd8be73b54f5436a5cd2e73ba9b6bfa9.svg" align=middle width=10.751395249999991pt height=25.59845739999999pt/> - is regularization parameter. Then partial derivatives will be:
+
+<p align="center"><img src="assets/e2287bf9760de5c579094d6a973d2e54.svg" align=middle width=451.217442pt height=755.9377426000001pt/></p>
+
+The whole gradient in vector form can be written as:
+
+<p align="center"><img src="assets/b0fc023df9bb92300cc08cb93082221a.svg" align=middle width=297.21883365pt height=21.0338081pt/></p>
+
+Where <img src="assets/f70e5a55c48604acfb3be95ff3209f30.svg" align=middle width=169.18174150000002pt height=31.0090858pt/> - column vector of outputs of softmax, <img src="assets/71c0437a67c94e48f18cc11d0c17a38c.svg" align=middle width=14.14961769999999pt height=15.871031600000025pt/> - unit column vector <img src="assets/c0f929543ff8b52491172f6b25974c14.svg" align=middle width=50.17291944999999pt height=23.755361600000015pt/> where all elements are zeros except <img src="assets/4f4f4e395762a3af4575de74c019ebb5.svg" align=middle width=6.655624749999991pt height=22.672930299999983pt/>-th which is <img src="assets/034d0a6be0424bffe9a6e7ac9236c0f5.svg" align=middle width=9.215477149999991pt height=23.755361600000015pt/>.
+
+Then incremental update rule will be:
+
+<p align="center"><img src="assets/b8d50167d5cf144fdeb01fb65430abfa.svg" align=middle width=228.0022473pt height=21.8939027pt/></p>
 
 Implementation: [p.ipynb](p.ipynb)
 

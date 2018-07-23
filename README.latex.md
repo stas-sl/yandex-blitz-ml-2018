@@ -251,7 +251,47 @@ Implementation: [o_test.ipynb](o_test.ipynb), [o.py](o.py)
 
 # P. Adversarial attack (white-box)
 
-TODO
+![p](assets/p.svg)
+
+The idea is to start with the source image and incrementally update it a little bit in opposite gradient (w.r.t. input image) direction, so that with each iteration the model predicts higher and higher probability that the image belongs to the target class. As long as we know the underlying model is plain linear classifier with softmax activation, we can analytically compute the gradient of the loss function w.r.t. the input.
+
+The loss function that we are going to minimize is:
+
+\begin{equation*}
+\begin{split}
+J(x,t) & =-\log P(y=t \mid x) + \lambda (x - \bar x)^T(x - \bar x) \\
+       & =-\log s_t + \lambda (x - \bar x)^T(x - \bar x) \\
+       & =-\log \frac{e^{w_{t} \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} + \lambda (x - \bar x)^T(x - \bar x)
+\end{split}
+\end{equation*}
+
+Where $\bar x$ - is original the image, $t$ - target class, $s_j$ - $j$-th output of softmax, $\lambda$ - is regularization parameter. Then partial derivatives will be:
+
+\begin{equation*}
+\begin{split}
+\frac{\partial J(x, t)}{\partial x_i} & = \frac{\partial}{\partial x_i}\left(-\log \frac{e^{w_{t} \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} + \lambda (x - \bar x)^T(x - \bar x)\right)\\ 
+  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot t}} - \log e^{w_t \cdot x}\right) + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot t}} - w_t \cdot x\right) + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot t}}\right) - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\frac{\partial}{\partial x_i}\sum\limits_{j=1}^{10} e^{w_j \cdot t}}{\sum\limits_{j=1}^{10} e^{w_j \cdot t}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\sum\limits_{j=1}^{10} w_{ji}e^{w_j \cdot t}}{\sum\limits_{j=1}^{10} e^{w_j \cdot t}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \sum\limits_{j=1}^{10} w_{ji} \frac{e^{w_j \cdot t}}{\sum\limits_{k=1}^{10} e^{w_k \cdot t}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \sum\limits_{j=1}^{10} w_{ji}s_j - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \sum\limits_{j=1}^{10} w_{ji}(s_j - 1_{j=t}) + 2\lambda (x_i - \bar x_i)
+\end{split}
+\end{equation*}
+
+The whole gradient in vector form can be written as:
+
+$$
+\nabla_x J(x, t) = W^T(S - e_t) + 2\lambda(x - \bar x)
+$$
+
+Where $S = (s_1, s_2, \dots, s_{10})^T$ - column vector of outputs of softmax, $e_t$ - unit column vector $1\times 10$ where all elements are zeros except $t$-th which is $1$.
+
+Then incremental update rule will be:
+
+$$x^{(i+1)} = x^{(i)} - \alpha\nabla_x J(x^{(i)}, t)$$
 
 Implementation: [p.ipynb](p.ipynb)
 
