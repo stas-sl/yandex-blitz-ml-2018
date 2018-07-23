@@ -234,7 +234,7 @@ Where:
 We initialize these variables with some random values and then iterate over each known user-movie-raiting tuples and compute 
 error. Then we update just a little bit all parameters to minimize the error:
 
-<p align="center"><img src="assets/52fc4c184fe34f060780915a8a54924e.svg" align=middle width=266.19900120000005pt height=84.7820664pt/></p>
+<p align="center"><img src="assets/acf0e13f23be91d60bb822910780b719.svg" align=middle width=239.57638750000004pt height=101.36986385000002pt/></p>
 
 Where <img src="assets/9be29c69a1e76559ef3b12be5c5f459b.svg" align=middle width=139.53533055pt height=25.59845739999999pt/>, <img src="assets/fd8be73b54f5436a5cd2e73ba9b6bfa9.svg" align=middle width=10.751395249999991pt height=25.59845739999999pt/> - regularization parameter, <img src="assets/11c596de17c342edeed29f489aa4b274.svg" align=middle width=10.566169549999989pt height=15.871031600000025pt/> - learning rate.
 

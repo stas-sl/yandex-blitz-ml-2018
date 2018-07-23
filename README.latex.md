@@ -236,14 +236,14 @@ $q_m$ - movie embedding, vector of size $d$ (number of factors)<br>
 We initialize these variables with some random values and then iterate over each known user-movie-raiting tuples and compute 
 error. Then we update just a little bit all parameters to minimize the error:
 
-$$
-\begin{array}{lll}
-b_u & \leftarrow & b_u + \gamma (e_{um} - \lambda b_u)\\
-b_m & \leftarrow & b_m + \gamma (e_{um} - \lambda b_m)\\
-p_u & \leftarrow & p_u + \gamma (e_{um} \cdot q_m - \lambda p_u) \\
-q_m & \leftarrow & q_m + \gamma (e_{um} \cdot p_u - \lambda q_m)
-\end{array}
-$$
+\begin{equation*}
+\begin{split}
+b_u & \leftarrow  b_u + \gamma (e_{um} - \lambda b_u)\\
+b_m & \leftarrow  b_m + \gamma (e_{um} - \lambda b_m)\\
+p_u & \leftarrow  p_u + \gamma (e_{um} \cdot q_m - \lambda p_u) \\
+q_m & \leftarrow  q_m + \gamma (e_{um} \cdot p_u - \lambda q_m)
+\end{split}
+\end{equation*}
 
 Where $e_{um} = r_{um} - \hat{r}_{um}$, $\lambda$ - regularization parameter, $\gamma$ - learning rate.
 
