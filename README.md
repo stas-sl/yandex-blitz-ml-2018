@@ -1,26 +1,18 @@
+
+
 This repo contains solutions of all 17 tasks from all qualification and final rounds of
 [Yandex.Blitz Machine Learning competition](https://contest.yandex.ru/contest/8470)
 held in the end of June, 2018.
 
-# A. Stump
+# A. Stump1
 
 ![a](assets/a.svg)
 
 The are 3 important observations here:
 
-1. All possible candidates for split (i.e. **c** value) are all points in the middle
-of 2 consecutive <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> coordinates (dashed lines in the image). So we have to check only 
-<img src="assets/efcf8d472ecdd2ea56d727b5746100e3.svg" align=middle width=42.80482639999999pt height=23.755361600000015pt/> variants (or less if some points have equal <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> coordinates).
-
-2. If we fix **c** then optimal values for **a** and **b** that minimize MSE would be just 
-mean of <img src="assets/91aac9730317276af725abd8cef04ca9.svg" align=middle width=14.795948499999989pt height=25.188841500000024pt/> coordinates of all points on each side of the split.
-
-3. If we will naively calculate mean for each split by iterating over all points
-we'll get <img src="assets/c3f65f86f2baa7f28840d7c68c00f5f2.svg" align=middle width=53.9922907pt height=30.005601399999982pt/> complexity which will not work, so instead we should sort all
-points by <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> and then store sums of <img src="assets/91aac9730317276af725abd8cef04ca9.svg" align=middle width=14.795948499999989pt height=25.188841500000024pt/> and <img src="assets/6e9fb305c704f8322e39f6132d0468fe.svg" align=middle width=22.142735099999992pt height=30.005601399999982pt/> for left and right sides of current split.
-Then going to next <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> we can update those sums only by value of points that change side.
-Thus we will be able to easily compute mean as well as MSE for both sides and find split
-that minimizes MSE in <img src="assets/e7a2f022962441f2be6dc8e70e837b4a.svg" align=middle width=45.72395804999999pt height=27.646325999999984pt/>, though overall complexity will be <img src="assets/2a614f0f77ff651ee3f7ab0f114a1a1d.svg" align=middle width=92.4921782pt height=27.646325999999984pt/> due to sorting.
+1. All possible candidates for split (i.e. **c** value) are all points in the middle of 2 consecutive <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> coordinates (dashed lines in the image). So we have to check only <img src="assets/efcf8d472ecdd2ea56d727b5746100e3.svg" align=middle width=42.80482639999999pt height=23.755361600000015pt/> variants (or less if some points have equal <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> coordinates).
+2. If we fix **c** then optimal values for **a** and **b** that minimize MSE would be just mean of <img src="assets/91aac9730317276af725abd8cef04ca9.svg" align=middle width=14.795948499999989pt height=25.188841500000024pt/> coordinates of all points on each side of the split.
+3. If we will naively calculate mean for each split by iterating over all points we'll get <img src="assets/c3f65f86f2baa7f28840d7c68c00f5f2.svg" align=middle width=53.9922907pt height=30.005601399999982pt/> complexity which will not work, so instead we should sort all points by <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> and then store sums of <img src="assets/91aac9730317276af725abd8cef04ca9.svg" align=middle width=14.795948499999989pt height=25.188841500000024pt/> and <img src="assets/6e9fb305c704f8322e39f6132d0468fe.svg" align=middle width=22.142735099999992pt height=30.005601399999982pt/> for left and right sides of current split. Then going to next <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> we can update those sums only by value of points that change side. Thus we will be able to easily compute mean as well as MSE for both sides and find split that minimizes MSE in <img src="assets/e7a2f022962441f2be6dc8e70e837b4a.svg" align=middle width=45.72395804999999pt height=27.646325999999984pt/>, though overall complexity will be <img src="assets/2a614f0f77ff651ee3f7ab0f114a1a1d.svg" align=middle width=92.4921782pt height=27.646325999999984pt/> due to sorting.
 
 Implementation: [a.py](a.py)
 
@@ -28,8 +20,8 @@ Implementation: [a.py](a.py)
 
 Let's ignore noise and define the following function (MSE):
 
-<p align="center"><img src="assets/b22c2b242d31f7a5b260a35288109588.svg" align=middle width=385.46306960000004pt height=50.33949715000001pt/></p>
-  
+<p align="center"><img src="assets/dc1154838a80353a1d3610a809aa9dba.svg" align=middle width=385.46306960000004pt height=50.33949715000001pt/></p>
+
 To find coefficients *a*, *b* and *c* we minimize this function using `scipy.optimize.minimize`.
 
 Implementation: [b.py](b.py)
@@ -73,7 +65,7 @@ This problem looks less like machine learning problem but more like traditional 
 
 Let's recall the formula for generalized AUC:
 
-<p align="center"><img src="assets/3b3765e29e9d30357f533deacfec9b79.svg" align=middle width=340.30091215pt height=62.464926250000005pt/></p>
+<p align="center"><img src="assets/e457cd2630a616fa81d566621747dcb5.svg" align=middle width=403.5843709pt height=62.464926250000005pt/></p>
 
 The naive solution would be to go over all pairs of <img src="assets/77a3b857d53fb44e33b53e4c8b68351a.svg" align=middle width=6.349677299999989pt height=24.311253299999994pt/> and <img src="assets/36b5afebdba34564d884d347484ac0c7.svg" align=middle width=8.645012999999988pt height=24.311253299999994pt/> and just calculate cases when <img src="assets/50a4d4d808e63c013645de93b95e08ca.svg" align=middle width=50.866177349999994pt height=22.672930299999983pt/> and <img src="assets/1d79dc63628f7df562d6d4a19ac118f9.svg" align=middle width=55.62759265pt height=19.872096900000006pt/>, though the complexity will be <img src="assets/c3f65f86f2baa7f28840d7c68c00f5f2.svg" align=middle width=53.9922907pt height=30.005601399999982pt/> and we'll get TL for <img src="assets/b5b9788de90f0b9dfb14ed2d64708bb8.svg" align=middle width=67.17020885pt height=30.005601399999982pt/>. So we need something smarter.
 
@@ -101,11 +93,11 @@ Implementation: [g.ipynb](g.ipynb)
 
 We will use a simple linear model with 2 coefficients to predict restaurant score based on distance and rating:
 
-<p align="center"><img src="assets/9a998adb53b31ca7e72130b7ffc05e53.svg" align=middle width=168.38135195pt height=15.563833550000002pt/></p>
+<p align="center"><img src="assets/61fb1b29365a17ebd35401f07e228426.svg" align=middle width=168.38135195pt height=15.563833550000002pt/></p>
 
 We may notice that the expression we are asked to minimize is exactly the negative log likelihood (divided by constant *N*) or loss function of logistic regression:
 
-<p align="center"><img src="assets/942685ad99e4428b9be7ca6646c4d339.svg" align=middle width=405.8355249pt height=54.02313945pt/></p>
+<p align="center"><img src="assets/8370200341c3c39d2d5782932bba2bec.svg" align=middle width=405.8355249pt height=54.02313945pt/></p>
 
 Because logistic regression requires only labels 0 or 1 and target metric will be evaluated on pairs with known winner and looser, we will omit samples with ties (0.5 target) during training. To solve logistic regression we will use SGD.
 
@@ -127,7 +119,18 @@ As it is said that only few features are relevant, we'd like to find out what ar
 
 We see that features 5 and 95 are the most important ones. Let's look at them and the target:
 
-<table>  <thead> <tr style="text-align: right;">      <th></th>      <th>5</th>      <th>95</th>      <th>100</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>1</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>2</th>      <td>0</td>      <td>0</td>      <td>0</td>    </tr>    <tr>      <th>3</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>4</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>5</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>6</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>7</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>8</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>9</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>  </tbody></table>
+|      | 5    | 95   | 100(target) |
+| ---- | ---- | ---- | ----------- |
+| 0    | 0    | 1    | 1           |
+| 1    | 0    | 1    | 1           |
+| 2    | 0    | 0    | 0           |
+| 3    | 1    | 1    | 0           |
+| 4    | 1    | 1    | 0           |
+| 5    | 1    | 1    | 0           |
+| 6    | 1    | 1    | 0           |
+| 7    | 1    | 1    | 0           |
+| 8    | 0    | 1    | 1           |
+| 9    | 0    | 1    | 1           |
 
 Looks like XOR: <img src="assets/14279deb74124feae51cac1eb8dee83f.svg" align=middle width=247.87254230000005pt height=25.59845739999999pt/>. Double-checking on the whole dataset confirms our hypothesis.
 
@@ -137,17 +140,17 @@ Implementation: [i.ipynb](i.ipynb)
 
 The task is given a set of points <img src="assets/9516deb02a4c8362bc9b12a69f6b87cb.svg" align=middle width=237.7464563pt height=27.646325999999984pt/> and their respective classes <img src="assets/0639f95b687db1c9499938d0e983f9f5.svg" align=middle width=277.1705668pt height=27.646325999999984pt/> to find a hyperplane separating those points according to their classes. Formally, find such a vector <img src="assets/08d68c5754b303eac3b4d98eb1598a65.svg" align=middle width=58.65881394999999pt height=25.393651300000002pt/> that:
 
-<p align="center"><img src="assets/18a252a362e5ccfdc8aebe6b323ecee8.svg" align=middle width=271.40544325pt height=66.3518299pt/></p>
+<p align="center"><img src="assets/05d473830075ef5f0eccaaf54c7a8456.svg" align=middle width=271.40544325pt height=66.3518299pt/></p>
 
 Although there are a few linear models that might be applicable to this task, namely linear/logistic regression, SVM, perceptron, not all of them will find a hyperplane that splits all points exactly. This can happen if, according to the respective loss function, it is 'cheaper' to misclassify a single point, but the total loss for other points will be less. Though it doesn't apply to the perceptron model - it tries to find separating hyperplane, that splits the classes exactly, if it is possible, but if not it will never converge. In the task statement it is said that the input dataset is known to be linearly separable, so we can use the perceptron here. During training only points that are misclassified contribute to the error, so if a point was already classified correctly it doesn't matter how far it is from decision boundary, so we may end up with decision boundary being very close to some of training points, but in our task that is acceptable, as we don't have any other requrements for the hyperplane.
 
 The perceptron model has <img src="assets/0e51a2dede42189d77627c4d742822c3.svg" align=middle width=16.18256789999999pt height=15.871031600000025pt/> parameters <img src="assets/31de31d2aa8a24f524564ad3fb7914bc.svg" align=middle width=148.34946499999998pt height=27.646325999999984pt/> and maps the input vector <img src="assets/9fc20fb1d3825674c6a279cb0d5ca636.svg" align=middle width=15.74841914999999pt height=15.871031600000025pt/> to the output class <img src="assets/2b442e3e088d1b744730822d18e7aa21.svg" align=middle width=14.250977349999992pt height=15.871031600000025pt/>:
 
-<p align="center"><img src="assets/cf1e7ee88a6de14d52cc62562d66b506.svg" align=middle width=246.959053pt height=66.3518299pt/></p>
+<p align="center"><img src="assets/f32523c1fbf4fe3d2a003130780dbc7f.svg" align=middle width=246.959053pt height=66.3518299pt/></p>
 
 In order to find the parameters of vector <img src="assets/44bc9d542a92714cac84e01cbbb7fd61.svg" align=middle width=9.74238489999999pt height=15.871031600000025pt/>, an iterative update rule is used:
 
-<p align="center"><img src="assets/34d22dfc07bf2b5ad4f8bf3ab10c96de.svg" align=middle width=628.1722008500001pt height=22.06585465pt/></p>
+<p align="center"><img src="assets/2e90101bb57dc32f618881690607d249.svg" align=middle width=628.1722008500001pt height=22.06585465pt/></p>
 
 Despite linear/logistic regression might not always find separating hyperplane correctly, my solutions using both of them were accepted - probably the tests were not so hard and the points were separated by a wide margin.
 
@@ -167,7 +170,13 @@ Implementation: [k_test.ipynb](k_test.ipynb), [k_bytearray.py](k_bytearray.py), 
 
 The most important observation in this task is similarity between **ssid** and **organization name** for those rows where *target=1*. Here are just a few samples with *target=1*:
 
-<table>  <thead>    <tr>      <th></th>      <th>names</th>      <th>ssid</th>    </tr>  </thead>  <tbody>    <tr>      <th>18</th>      <td>["Аэропорт Толмачево, бухгалтерия", "Толмачево"]</td>      <td>Tolmachevo-MTS-Free</td>    </tr>    <tr>      <th>38</th>      <td>["Kontrolmatik"]</td>      <td>Kontrolmatik_Staff</td>    </tr>    <tr>      <th>49</th>      <td>["ПКВ Моторс", "Pkw Motors", "Pkw Motors", "Те...</td>      <td>PKW Guests</td>    </tr>    <tr>      <th>77</th>      <td>["Техцентр Юста", "Tekhtsentr Yusta", "Юста", ...</td>      <td>YUSTA</td>    </tr>    <tr>      <th>94</th>      <td>["Респект Авто", "Автосервис"]</td>      <td>RespectAuto</td>    </tr>  </tbody></table>
+| id   | names                                             | ssid                |
+| ---- | ------------------------------------------------- | ------------------- |
+| 18   | ["Аэропорт Толмачево, бухгалтерия", "Толмачево"]  | Tolmachevo-MTS-Free |
+| 38   | ["Kontrolmatik"]                                  | Kontrolmatik_Staff  |
+| 49   | ["ПКВ Моторс", "Pkw Motors", "Pkw Motors", "Те... | PKW Guests          |
+| 77   | ["Техцентр Юста", "Tekhtsentr Yusta", "Юста", ... | YUSTA               |
+| 94   | ["Респект Авто", "Автосервис"]                    | RespectAuto         |
 
 While **ssid** contains mostly latin characters, organization names might be in other languages like russian, so we need to perform some transliteration before calculating similarity. After that we will compute similarity between 2 strings as number of n-grams ocurred in both strings. We will use **n=1..8**. Also we'll compute similarity for **ssid** and **urls** fields, because **urls** might also include some substrings from **ssid**.
 
@@ -185,13 +194,13 @@ This task might look similar to [H. Restaurants](#h-restaurants). The training d
 
 Thus our task can rewritten as:
 
-<p align="center"><img src="assets/355bfd87df3626f157eeb4db4bc56c71.svg" align=middle width=582.27460365pt height=38.5248921pt/></p>
+<p align="center"><img src="assets/7e5ccf04b2f3a6b4c5c2fc80a7a171b5.svg" align=middle width=582.27460365pt height=38.5248921pt/></p>
 
 Or in vectorized form:
 
-<p align="center"><img src="assets/0fb40f1a67fc14bfc396806d77e0700e.svg" align=middle width=107.83737505pt height=21.0338081pt/></p>
+<p align="center"><img src="assets/2fcf8e9215cffe44a804684a8abac421.svg" align=middle width=102.71766840000001pt height=21.0338081pt/></p>
 
-where <img src="assets/6feb3bad07ddeea39e0e6487b370ddd2.svg" align=middle width=158.6880827pt height=27.646325999999984pt/> - vector of all objects' scores and <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> - is <img src="assets/63b142315f480db0b3ff453d62cc3e7f.svg" align=middle width=49.77191529999999pt height=21.5027202pt/> design matrix, where each row contains only 2 non-zero elements, namely <img src="assets/e33baa1a785610766d8c96a85ea0d929.svg" align=middle width=74.94207365pt height=23.755361600000015pt/> and <img src="assets/a6b6803e79a52d9c48fbe3a16bbbed28.svg" align=middle width=89.27725745pt height=23.755361600000015pt/> for all <img src="assets/f68112419890e1aaee4b3945368ad473.svg" align=middle width=71.68115264999999pt height=24.311253299999994pt/>.
+Where <img src="assets/6feb3bad07ddeea39e0e6487b370ddd2.svg" align=middle width=158.6880827pt height=27.646325999999984pt/> - vector of all objects' scores and <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> - is <img src="assets/63b142315f480db0b3ff453d62cc3e7f.svg" align=middle width=49.77191529999999pt height=21.5027202pt/> design matrix, where each row contains only 2 non-zero elements, namely <img src="assets/e33baa1a785610766d8c96a85ea0d929.svg" align=middle width=74.94207365pt height=23.755361600000015pt/> and <img src="assets/a6b6803e79a52d9c48fbe3a16bbbed28.svg" align=middle width=89.27725745pt height=23.755361600000015pt/> for all <img src="assets/f68112419890e1aaee4b3945368ad473.svg" align=middle width=71.68115264999999pt height=24.311253299999994pt/>.
 
 There is always <img src="assets/034d0a6be0424bffe9a6e7ac9236c0f5.svg" align=middle width=9.215477149999991pt height=23.755361600000015pt/> on the right side of equation because first object <img src="assets/23a9f1f890788fca12299080b7ddeeb9.svg" align=middle width=22.30382384999999pt height=15.871031600000025pt/> is always preferred over the second <img src="assets/91cfda11becf7d409e7826d26965b2e0.svg" align=middle width=22.30382384999999pt height=15.871031600000025pt/>.
 
@@ -207,7 +216,7 @@ Unfortunately my understanding of Bayessian statistics not as profound as I'd li
 
 That was an overall justification, now let's get to our task. According to wikipedia articles [Checking whether a coin is fair](https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair) and [Beta distribution](https://en.wikipedia.org/wiki/Beta_distribution) we know that the a posterior distribution of <img src="assets/0d19b0a4827a28ecffa01dfedf5f5f2c.svg" align=middle width=14.48770519999999pt height=15.871031600000025pt/> after getting <img src="assets/a157a419f4d70215e97230c8bfe59bb8.svg" align=middle width=62.726819649999996pt height=25.59845739999999pt/> heads and <img src="assets/684b9ab190097118dc7494cc56ce8a18.svg" align=middle width=97.02116319999999pt height=25.59845739999999pt/> tails is in fact a <img src="assets/57500b0520bf2dc4f1978141f7f782fc.svg" align=middle width=39.88464764999999pt height=25.188841500000024pt/> distribution: <img src="assets/5f10e1a3673762981a9e3a8876883f25.svg" align=middle width=428.79065605pt height=27.646325999999984pt/> with probability density function:
 
-<p align="center"><img src="assets/15b764323036dbb337d395f1fbcd7e5d.svg" align=middle width=619.1771327pt height=46.8699461pt/></p>
+<p align="center"><img src="assets/c247306cd4d9f509fbe04084f687c4fa.svg" align=middle width=619.1771327pt height=46.8699461pt/></p>
 
 From the properties of <img src="assets/57500b0520bf2dc4f1978141f7f782fc.svg" align=middle width=39.88464764999999pt height=25.188841500000024pt/> distribution we know that its expected value is <img src="assets/8a0e49c8ec3a0dd45ee07822d28a29e3.svg" align=middle width=96.49313435pt height=31.7419892pt/>, while its mode is <img src="assets/1e09657fbd3f90d78db722b284d92fde.svg" align=middle width=96.6978868pt height=31.14240049999998pt/>. So if we would use mode instead of mean we would get the same results as our initial idea that didn't work.
 
@@ -262,8 +271,7 @@ Where <img src="assets/f70e5a55c48604acfb3be95ff3209f30.svg" align=middle width=
 
 Then incremental update rule will be:
 
-<p align="center"><img src="assets/b8d50167d5cf144fdeb01fb65430abfa.svg" align=middle width=228.0022473pt height=21.8939027pt/></p>
-
+<p align="center"><img src="assets/8fde4192a2fad7ec82882fe6d488b15d.svg" align=middle width=228.0022473pt height=21.8939027pt/></p>
 Implementation: [p.ipynb](p.ipynb)
 
 

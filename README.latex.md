@@ -1,26 +1,18 @@
+
+
 This repo contains solutions of all 17 tasks from all qualification and final rounds of
 [Yandex.Blitz Machine Learning competition](https://contest.yandex.ru/contest/8470)
 held in the end of June, 2018.
 
-# A. Stump
+# A. Stump1
 
 ![a](assets/a.svg)
 
 The are 3 important observations here:
 
-1. All possible candidates for split (i.e. **c** value) are all points in the middle
-of 2 consecutive $X$ coordinates (dashed lines in the image). So we have to check only 
-$n-1$ variants (or less if some points have equal $X$ coordinates).
-
-2. If we fix **c** then optimal values for **a** and **b** that minimize MSE would be just 
-mean of $Y$ coordinates of all points on each side of the split.
-
-3. If we will naively calculate mean for each split by iterating over all points
-we'll get $O(N^2)$ complexity which will not work, so instead we should sort all
-points by $X$ and then store sums of $Y$ and $Y^2$ for left and right sides of current split.
-Then going to next $X$ we can update those sums only by value of points that change side.
-Thus we will be able to easily compute mean as well as MSE for both sides and find split
-that minimizes MSE in $O(N)$, though overall complexity will be $O(N \log N)$ due to sorting.
+1. All possible candidates for split (i.e. **c** value) are all points in the middle of 2 consecutive $X$ coordinates (dashed lines in the image). So we have to check only $n-1$ variants (or less if some points have equal $X$ coordinates).
+2. If we fix **c** then optimal values for **a** and **b** that minimize MSE would be just mean of $Y$ coordinates of all points on each side of the split.
+3. If we will naively calculate mean for each split by iterating over all points we'll get $O(N^2)$ complexity which will not work, so instead we should sort all points by $X$ and then store sums of $Y$ and $Y^2$ for left and right sides of current split. Then going to next $X$ we can update those sums only by value of points that change side. Thus we will be able to easily compute mean as well as MSE for both sides and find split that minimizes MSE in $O(N)$, though overall complexity will be $O(N \log N)$ due to sorting.
 
 Implementation: [a.py](a.py)
 
@@ -28,8 +20,10 @@ Implementation: [a.py](a.py)
 
 Let's ignore noise and define the following function (MSE):
 
-$$F(a, b, c) = \sum_{i=1}^n\left((a\sin x_i + b\ln x_i)^2+c x_i^2 - y_i^2\right)^2$$
-  
+$$
+F(a, b, c) = \sum_{i=1}^n\left((a\sin x_i + b\ln x_i)^2+c x_i^2 - y_i^2\right)^2
+$$
+
 To find coefficients *a*, *b* and *c* we minimize this function using `scipy.optimize.minimize`.
 
 Implementation: [b.py](b.py)
@@ -74,7 +68,7 @@ This problem looks less like machine learning problem but more like traditional 
 Let's recall the formula for generalized AUC:
 
 $$
-GAUC=\frac{\sum\limits_{i,\ j:\ t_i>t_j}\left([y_i>y_j] + \frac{1}{2}[y_i=y_j]\right)}{\left|\{i,j: t_i>t_j\}\right|}
+AUC_{generalized}=\frac{\sum\limits_{i,\ j:\ t_i>t_j}\left([y_i>y_j] + \frac{1}{2}[y_i=y_j]\right)}{\left|\{i,j: t_i>t_j\}\right|}
 $$
 
 The naive solution would be to go over all pairs of $i$ and $j$ and just calculate cases when $t_i > t_j$ and $y_i > y_j$, though the complexity will be $O(N^2)$ and we'll get TL for $N=10^6$. So we need something smarter.
@@ -103,11 +97,15 @@ Implementation: [g.ipynb](g.ipynb)
 
 We will use a simple linear model with 2 coefficients to predict restaurant score based on distance and rating:
 
-$$score_i = w_1 r_i + w_2 d_i$$
+$$
+score_i = w_1 r_i + w_2 d_i
+$$
 
 We may notice that the expression we are asked to minimize is exactly the negative log likelihood (divided by constant *N*) or loss function of logistic regression:
 
-$$J(w_1, w_2) = \frac{1}{N}\sum_{k=1}^N \ln(1 + e^{score_{looser_k} - score_{winner_k}})$$
+$$
+J(w_1, w_2) = \frac{1}{N}\sum_{k=1}^N \ln(1 + e^{score_{looser_k} - score_{winner_k}})
+$$
 
 Because logistic regression requires only labels 0 or 1 and target metric will be evaluated on pairs with known winner and looser, we will omit samples with ties (0.5 target) during training. To solve logistic regression we will use SGD.
 
@@ -129,7 +127,18 @@ As it is said that only few features are relevant, we'd like to find out what ar
 
 We see that features 5 and 95 are the most important ones. Let's look at them and the target:
 
-<table>  <thead> <tr style="text-align: right;">      <th></th>      <th>5</th>      <th>95</th>      <th>100</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>1</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>2</th>      <td>0</td>      <td>0</td>      <td>0</td>    </tr>    <tr>      <th>3</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>4</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>5</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>6</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>7</th>      <td>1</td>      <td>1</td>      <td>0</td>    </tr>    <tr>      <th>8</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>    <tr>      <th>9</th>      <td>0</td>      <td>1</td>      <td>1</td>    </tr>  </tbody></table>
+|      | 5    | 95   | 100(target) |
+| ---- | ---- | ---- | ----------- |
+| 0    | 0    | 1    | 1           |
+| 1    | 0    | 1    | 1           |
+| 2    | 0    | 0    | 0           |
+| 3    | 1    | 1    | 0           |
+| 4    | 1    | 1    | 0           |
+| 5    | 1    | 1    | 0           |
+| 6    | 1    | 1    | 0           |
+| 7    | 1    | 1    | 0           |
+| 8    | 0    | 1    | 1           |
+| 9    | 0    | 1    | 1           |
 
 Looks like XOR: $target = feature_5 \oplus feature_{95}$. Double-checking on the whole dataset confirms our hypothesis.
 
@@ -139,17 +148,23 @@ Implementation: [i.ipynb](i.ipynb)
 
 The task is given a set of points $X=\{x_1, x_2, ..., x_n\},\ x_i \in \mathbb{R}^m$ and their respective classes $Y=\{y_1, y_2, ..., y_n\},\ y_i \in \{-1, +1\}$ to find a hyperplane separating those points according to their classes. Formally, find such a vector $a \in \mathbb{R}^m$ that:
 
-$$sign\left(\sum_{j=1}^m a_{j}x_{ij}\right) = y_i,\  1 \leq  i\leq  n$$
+$$
+sign\left(\sum_{j=1}^m a_{j}x_{ij}\right) = y_i,\  1 \leq  i\leq  n
+$$
 
 Although there are a few linear models that might be applicable to this task, namely linear/logistic regression, SVM, perceptron, not all of them will find a hyperplane that splits all points exactly. This can happen if, according to the respective loss function, it is 'cheaper' to misclassify a single point, but the total loss for other points will be less. Though it doesn't apply to the perceptron model - it tries to find separating hyperplane, that splits the classes exactly, if it is possible, but if not it will never converge. In the task statement it is said that the input dataset is known to be linearly separable, so we can use the perceptron here. During training only points that are misclassified contribute to the error, so if a point was already classified correctly it doesn't matter how far it is from decision boundary, so we may end up with decision boundary being very close to some of training points, but in our task that is acceptable, as we don't have any other requrements for the hyperplane.
 
 The perceptron model has $m$ parameters $a=(a_1, a_2, ..., a_m)$ and maps the input vector $x_i$ to the output class $y_i$:
 
-$$f(x_i) = sign\left(\sum_{j=1}^m a_{j}x_{ij}\right) = y_i$$
+$$
+f(x_i) = sign\left(\sum_{j=1}^m a_{j}x_{ij}\right) = y_i
+$$
 
 In order to find the parameters of vector $a$, an iterative update rule is used:
 
-$$a^{(k+1)} = a^{(k)} + lr \cdot X^T (Y - \hat Y),\ \text{where}\ \hat Y = sign(a^{(k)} X^T) \text{ - current prediction}$$
+$$
+a^{(k+1)} = a^{(k)} + lr \cdot X^T (Y - \hat Y),\ \text{where}\ \hat Y = sign(a^{(k)} X^T) \text{ - current prediction}
+$$
 
 Despite linear/logistic regression might not always find separating hyperplane correctly, my solutions using both of them were accepted - probably the tests were not so hard and the points were separated by a wide margin.
 
@@ -169,7 +184,13 @@ Implementation: [k_test.ipynb](k_test.ipynb), [k_bytearray.py](k_bytearray.py), 
 
 The most important observation in this task is similarity between **ssid** and **organization name** for those rows where *target=1*. Here are just a few samples with *target=1*:
 
-<table>  <thead>    <tr>      <th></th>      <th>names</th>      <th>ssid</th>    </tr>  </thead>  <tbody>    <tr>      <th>18</th>      <td>["Аэропорт Толмачево, бухгалтерия", "Толмачево"]</td>      <td>Tolmachevo-MTS-Free</td>    </tr>    <tr>      <th>38</th>      <td>["Kontrolmatik"]</td>      <td>Kontrolmatik_Staff</td>    </tr>    <tr>      <th>49</th>      <td>["ПКВ Моторс", "Pkw Motors", "Pkw Motors", "Те...</td>      <td>PKW Guests</td>    </tr>    <tr>      <th>77</th>      <td>["Техцентр Юста", "Tekhtsentr Yusta", "Юста", ...</td>      <td>YUSTA</td>    </tr>    <tr>      <th>94</th>      <td>["Респект Авто", "Автосервис"]</td>      <td>RespectAuto</td>    </tr>  </tbody></table>
+| id   | names                                             | ssid                |
+| ---- | ------------------------------------------------- | ------------------- |
+| 18   | ["Аэропорт Толмачево, бухгалтерия", "Толмачево"]  | Tolmachevo-MTS-Free |
+| 38   | ["Kontrolmatik"]                                  | Kontrolmatik_Staff  |
+| 49   | ["ПКВ Моторс", "Pkw Motors", "Pkw Motors", "Те... | PKW Guests          |
+| 77   | ["Техцентр Юста", "Tekhtsentr Yusta", "Юста", ... | YUSTA               |
+| 94   | ["Респект Авто", "Автосервис"]                    | RespectAuto         |
 
 While **ssid** contains mostly latin characters, organization names might be in other languages like russian, so we need to perform some transliteration before calculating similarity. After that we will compute similarity between 2 strings as number of n-grams ocurred in both strings. We will use **n=1..8**. Also we'll compute similarity for **ssid** and **urls** fields, because **urls** might also include some substrings from **ssid**.
 
@@ -187,13 +208,17 @@ This task might look similar to [H. Restaurants](#h-restaurants). The training d
 
 Thus our task can rewritten as:
 
-$$\sigma(w_{a_{i1}}-w_{a_{i2}}) = 1,\ i=1...m,\text{ where }\sigma(x) = \frac{1}{1+e^{-x}}\text{ - sigmoid function }$$
+$$
+\sigma(w_{a_{i1}}-w_{a_{i2}}) = 1,\ i=1...m,\text{ where }\sigma(x) = \frac{1}{1+e^{-x}}\text{ - sigmoid function }
+$$
 
 Or in vectorized form:
 
-$$\sigma(Xw^T) = \mathbf{1}, $$
+$$
+\sigma(Xw^T) = \mathbf{1}
+$$
 
-where $w=(w_1, w_2, ..., w_n)$ - vector of all objects' scores and $X$ - is $m\times n$ design matrix, where each row contains only 2 non-zero elements, namely $x_{i,a_{i1}}=1$ and $x_{i,a_{i2}}=-1$ for all $i=1...m$.
+Where $w=(w_1, w_2, ..., w_n)$ - vector of all objects' scores and $X$ - is $m\times n$ design matrix, where each row contains only 2 non-zero elements, namely $x_{i,a_{i1}}=1$ and $x_{i,a_{i2}}=-1$ for all $i=1...m$.
 
 There is always $1$ on the right side of equation because first object $a_{i1}$ is always preferred over the second $a_{i2}$.
 
@@ -209,7 +234,9 @@ Unfortunately my understanding of Bayessian statistics not as profound as I'd li
 
 That was an overall justification, now let's get to our task. According to wikipedia articles [Checking whether a coin is fair](https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair) and [Beta distribution](https://en.wikipedia.org/wiki/Beta_distribution) we know that the a posterior distribution of $p_i$ after getting $h_i=m_i$ heads and $t_i=k_i-m_i$ tails is in fact a $Beta$ distribution: $p_i \sim Beta(h_i + 1, t_i + 1) = Beta(m_i+1, k_i-m_i+1)$ with probability density function:
 
-$$f(p_i\ \mid\ H=h_i,T=t_i)=\frac{p_i^{h_i} (1-p_i)^{t_i}}{B(h_i+1, t_i+1)}\text{, where } B(\alpha, \beta)\text{ - is }Beta\text{ function}$$
+$$
+f(p_i\ \mid\ H=h_i,T=t_i)=\frac{p_i^{h_i} (1-p_i)^{t_i}}{B(h_i+1, t_i+1)}\text{, where } B(\alpha, \beta)\text{ - is }Beta\text{ function}
+$$
 
 From the properties of $Beta$ distribution we know that its expected value is $\frac{\alpha}{\alpha+\beta}=\frac{m_i+1}{k_i+2}$, while its mode is $\frac{\alpha-1}{\alpha + \beta -2} = \frac{m_i}{k_i}$. So if we would use mode instead of mean we would get the same results as our initial idea that didn't work.
 
@@ -291,8 +318,9 @@ Where $S = (s_1, s_2, \dots, s_{10})^T$ - column vector of outputs of softmax, $
 
 Then incremental update rule will be:
 
-$$x^{(i+1)} = x^{(i)} - \alpha\nabla_x J(x^{(i)}, t)$$
-
+$$
+x^{(i+1)} = x^{(i)} - \alpha\nabla_x J(x^{(i)}, t)
+$$
 Implementation: [p.ipynb](p.ipynb)
 
 
