@@ -270,12 +270,12 @@ Where $\bar x$ - is original the image, $t$ - target class, $s_j$ - $j$-th outpu
 \begin{equation*}
 \begin{split}
 \frac{\partial J(x, t)}{\partial x_i} & = \frac{\partial}{\partial x_i}\left(-\log \frac{e^{w_{t} \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} + \lambda (x - \bar x)^T(x - \bar x)\right)\\ 
-  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot t}} - \log e^{w_t \cdot x}\right) + 2\lambda (x_i - \bar x_i) \\
-  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot t}} - w_t \cdot x\right) + 2\lambda (x_i - \bar x_i) \\
-  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot t}}\right) - w_{ti} + 2\lambda (x_i - \bar x_i) \\
-  & = \frac{\frac{\partial}{\partial x_i}\sum\limits_{j=1}^{10} e^{w_j \cdot t}}{\sum\limits_{j=1}^{10} e^{w_j \cdot t}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
-  & = \frac{\sum\limits_{j=1}^{10} w_{ji}e^{w_j \cdot t}}{\sum\limits_{j=1}^{10} e^{w_j \cdot t}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
-  & = \sum\limits_{j=1}^{10} w_{ji} \frac{e^{w_j \cdot t}}{\sum\limits_{k=1}^{10} e^{w_k \cdot t}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot x}} - \log e^{w_t \cdot x}\right) + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot x}} - w_t \cdot x\right) + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot x}}\right) - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\frac{\partial}{\partial x_i}\sum\limits_{j=1}^{10} e^{w_j \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \frac{\sum\limits_{j=1}^{10} w_{ji}e^{w_j \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
+  & = \sum\limits_{j=1}^{10} w_{ji} \frac{e^{w_j \cdot x}}{\sum\limits_{k=1}^{10} e^{w_k \cdot x}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
   & = \sum\limits_{j=1}^{10} w_{ji}s_j - w_{ti} + 2\lambda (x_i - \bar x_i) \\
   & = \sum\limits_{j=1}^{10} w_{ji}(s_j - 1_{j=t}) + 2\lambda (x_i - \bar x_i)
 \end{split}
@@ -295,8 +295,34 @@ $$x^{(i+1)} = x^{(i)} - \alpha\nabla_x J(x^{(i)}, t)$$
 
 Implementation: [p.ipynb](p.ipynb)
 
+
+
+
+
 # Q. Adversarial attack (black-box)
 
-TODO
+This task is similar to the previous white box adversarial attack, but here we don't have direct access to gradient, so we need to somehow estimate it using only output of the classifier. 
+
+There are a few different approaches to do it:
+
+- Use *substitute network* - new model that is trained to give the same answers as black-box model. And then hope that it's gradients are similar to the gradients of original model.
+- Use *finite difference method* to estimate gradient, while being precise it requires as much model evaluations as the dimensions of input image. We have *32x32x3* input image, so there will be *3072* evaluations per iteration. It actually may be acceptable but we'll use another method.
+- *Natural Evolution Strategies (NES)*. This method is well described in the [Black-box Adversarial Attacks with Limited Queries and Information](https://arxiv.org/abs/1804.08598) paper. In short we choose $n$ points in the neighborhood of $x$ and estimate gradient using function values at those points using formula:
+
+$$
+\nabla_x \mathbf{E}[J(x)] \approx \frac{1}{\sigma n}\sum_{i=1}^{n}\delta_i J(x+\sigma\delta_i)
+$$
+
+Where $\delta_i \sim N(0, I)$ and $\sigma$ is standard deviation.
+
+Here we don't depend on size of the input image and we can choose $n$ (number of model evaluations) to be *50* or *100*. Then using the estimated gradient we iteratively update image using SGD as in the white-box setting.
+
+$$
+x^{(i+1)} = x^{(i)} - \alpha\nabla_x\mathbf{E} [J(x^{(i)})]
+$$
+
+![q](assets/q.svg)
+
+After roughly *5000* iterations we've got desired target class probability > 0.5. It look like the *MSE=687* is quite large (much larger than *235* which is the threshold to get max points for this task) and the image is distorted quite a lot. After spending some time figuring out what's wrong and how it is possible to approach much lower threshold, I submitted this solution and got good results. As it turned out there was only one test for this task and the input image in it required less distortions to fool the classifier, so it worked well. After tuning learning rate, regularization parameter and number of points for NES the desired threshold was reached.
 
 Implementation: [q_visualization.ipynb](q_visualization.ipynb), [q.py](q.py)

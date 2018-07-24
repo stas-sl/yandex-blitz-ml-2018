@@ -252,7 +252,7 @@ The loss function that we are going to minimize is:
 
 Where <img src="assets/c97fba47d1059b5c2d3fa5f52768a2a7.svg" align=middle width=10.533774199999991pt height=20.929253500000016pt/> - is original the image, <img src="assets/4f4f4e395762a3af4575de74c019ebb5.svg" align=middle width=6.655624749999991pt height=22.672930299999983pt/> - target class, <img src="assets/227f4d8d12b0de49c4ca84f74fa98023.svg" align=middle width=15.483926499999992pt height=15.871031600000025pt/> - <img src="assets/36b5afebdba34564d884d347484ac0c7.svg" align=middle width=8.645012999999988pt height=24.311253299999994pt/>-th output of softmax, <img src="assets/fd8be73b54f5436a5cd2e73ba9b6bfa9.svg" align=middle width=10.751395249999991pt height=25.59845739999999pt/> - is regularization parameter. Then partial derivatives will be:
 
-<p align="center"><img src="assets/e2287bf9760de5c579094d6a973d2e54.svg" align=middle width=451.217442pt height=755.9377426000001pt/></p>
+<p align="center"><img src="assets/30fdddbcf71e200a82cd233381cd6f45.svg" align=middle width=454.0076675pt height=755.9377426000001pt/></p>
 
 The whole gradient in vector form can be written as:
 
@@ -266,8 +266,30 @@ Then incremental update rule will be:
 
 Implementation: [p.ipynb](p.ipynb)
 
+
+
+
+
 # Q. Adversarial attack (black-box)
 
-TODO
+This task is similar to the previous white box adversarial attack, but here we don't have direct access to gradient, so we need to somehow estimate it using only output of the classifier. 
+
+There are a few different approaches to do it:
+
+- Use *substitute network* - new model that is trained to give the same answers as black-box model. And then hope that it's gradients are similar to the gradients of original model.
+- Use *finite difference method* to estimate gradient, while being precise it requires as much model evaluations as the dimensions of input image. We have *32x32x3* input image, so there will be *3072* evaluations per iteration. It actually may be acceptable but we'll use another method.
+- *Natural Evolution Strategies (NES)*. This method is well described in the [Black-box Adversarial Attacks with Limited Queries and Information](https://arxiv.org/abs/1804.08598) paper. In short we choose <img src="assets/55a049b8f161ae7cfeb0197d75aff967.svg" align=middle width=11.06286124999999pt height=15.871031600000025pt/> points in the neighborhood of <img src="assets/332cc365a4987aacce0ead01b8bdcc0b.svg" align=middle width=10.533774199999991pt height=15.871031600000025pt/> and estimate gradient using function values at those points using formula:
+
+<p align="center"><img src="assets/378250a2c12c428256e808ccff8adc06.svg" align=middle width=268.92129100000005pt height=50.33949715000001pt/></p>
+
+Where <img src="assets/5852701715a58770b77e393ca9c28a7f.svg" align=middle width=97.01044244999999pt height=27.646325999999984pt/> and <img src="assets/8cda31ed38c6d59d14ebefa440099572.svg" align=middle width=11.192949549999991pt height=15.871031600000025pt/> is standard deviation.
+
+Here we don't depend on size of the input image and we can choose <img src="assets/55a049b8f161ae7cfeb0197d75aff967.svg" align=middle width=11.06286124999999pt height=15.871031600000025pt/> (number of model evaluations) to be *50* or *100*. Then using the estimated gradient we iteratively update image using SGD as in the white-box setting.
+
+<p align="center"><img src="assets/6e511b373a0b32d9f3dc651389067770.svg" align=middle width=237.32007015pt height=21.8939027pt/></p>
+
+![q](assets/q.svg)
+
+After roughly *5000* iterations we've got desired target class probability > 0.5. It look like the *MSE=687* is quite large (much larger than *235* which is the threshold to get max points for this task) and the image is distorted quite a lot. After spending some time figuring out what's wrong and how it is possible to approach much lower threshold, I submitted this solution and got good results. As it turned out there was only one test for this task and the input image in it required less distortions to fool the classifier, so it worked well. After tuning learning rate, regularization parameter and number of points for NES the desired threshold was reached.
 
 Implementation: [q_visualization.ipynb](q_visualization.ipynb), [q.py](q.py)

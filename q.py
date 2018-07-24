@@ -7,8 +7,8 @@ def estimate_grad(x, n, sigma):
     g = np.zeros_like(x).astype(float)
     for i in range(n):
         dx = np.random.normal(0, 1, x.shape)
-        g += bbox.calc(x + sigma * dx) * dx
-        g -= bbox.calc(x - sigma * dx) * dx
+        g += (1 - bbox.calc(x + sigma * dx)) * dx
+        g -= (1 - bbox.calc(x - sigma * dx)) * dx
 
     return g / 2 / n / sigma
 
@@ -24,8 +24,8 @@ x = bbox.get_image().astype(float)
 original = x.copy()
 for i in range(n_iter):
     grad = estimate_grad(x, n_estimate, sigma)
-    grad -= reg * (x - original) / x.shape[0]
-    x += lr * grad / np.linalg.norm(grad)
+    grad += reg * (x - original) / x.shape[0]
+    x -= lr * grad / np.linalg.norm(grad)
     x = np.clip(x, 0, 255)
     p = bbox.calc(x)
     if p > 0.5:
