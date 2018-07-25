@@ -79,7 +79,7 @@ Implementation: [e.ipynb](e.ipynb)
 
 # F. Generalized AUC
 
-![f](assets/f.png)
+![f](assets/f.svg)
 
 This problem looks less like machine learning problem but more like traditional competive programming problem.
 
