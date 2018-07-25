@@ -1,10 +1,27 @@
 
 
-This repo contains solutions of all 17 tasks from all qualification and final rounds of
-[Yandex.Blitz Machine Learning competition](https://contest.yandex.ru/contest/8470)
-held in the end of June, 2018.
+This repo contains solutions of all 17 tasks from all qualification and final rounds of [Yandex.Blitz Machine Learning competition](https://contest.yandex.ru/contest/8470) held in the end of June, 2018.
 
-# A. Stump1
+Quick jump to:
+- [A. Stump](#a-stump)
+- [B. Coefficients restoration](#b-coefficients-restoration)
+- [C. Freshness detector](#c-freshness-detector)
+- [D. Feature selection](#d-feature-selection)
+- [E. Warm up](#e-warm-up)
+- [F. Generalized AUC](#f-generalized-auc)
+- [G. Permutations](#g-permutations)
+- [H. Restaurants](#h-restaurants)
+- [I. Warm up](#i-warm-up)
+- [J. Linear separability problem](#j-linear-separability-problem)
+- [K. Unique queries](#k-unique-queries)
+- [L. Wi-Fi](#l-wi-fi)
+- [M. Pairwise ranking](#m-pairwise-ranking)
+- [N. Coins](#n-coins)
+- [O. SVD recommender](#o-svd-recommender)
+- [P. Adversarial attack (white-box)](#p-adversarial-attack-white-box)
+- [Q. Adversarial attack (black-box)](#q-adversarial-attack-black-box)
+
+# A. Stump
 
 ![a](assets/a.svg)
 
@@ -322,10 +339,6 @@ $$
 x^{(i+1)} = x^{(i)} - \alpha\nabla_x J(x^{(i)}, t)
 $$
 Implementation: [p.ipynb](p.ipynb)
-
-
-
-
 
 # Q. Adversarial attack (black-box)
 
