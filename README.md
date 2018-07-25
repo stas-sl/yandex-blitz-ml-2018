@@ -1,8 +1,11 @@
-
-
 This repo contains solutions of all 17 tasks from all qualification and final rounds of [Yandex.Blitz Machine Learning competition](https://contest.yandex.ru/contest/8470) held in the end of June, 2018.
 
+![leaderboard](assets/leaderboard.png)
+
+I didn't participate in the competition when it was really held so this is not real leaderboard (unfortunately). On the other hand I had more time to explore problems, learn something new and try different approaches.
+
 Quickly jump to:
+
 - [A. Stump](#a-stump)
 - [B. Coefficients restoration](#b-coefficients-restoration)
 - [C. Freshness detector](#c-freshness-detector)
