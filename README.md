@@ -2,7 +2,7 @@
 
 This repo contains solutions of all 17 tasks from all qualification and final rounds of [Yandex.Blitz Machine Learning competition](https://contest.yandex.ru/contest/8470) held in the end of June, 2018.
 
-Quick jump to:
+Quickly jump to:
 - [A. Stump](#a-stump)
 - [B. Coefficients restoration](#b-coefficients-restoration)
 - [C. Freshness detector](#c-freshness-detector)
@@ -289,6 +289,7 @@ Where <img src="assets/f70e5a55c48604acfb3be95ff3209f30.svg" align=middle width=
 Then incremental update rule will be:
 
 <p align="center"><img src="assets/8fde4192a2fad7ec82882fe6d488b15d.svg" align=middle width=228.0022473pt height=21.8939027pt/></p>
+
 Implementation: [p.ipynb](p.ipynb)
 
 # Q. Adversarial attack (black-box)

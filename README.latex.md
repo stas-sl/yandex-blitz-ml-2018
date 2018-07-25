@@ -2,7 +2,7 @@
 
 This repo contains solutions of all 17 tasks from all qualification and final rounds of [Yandex.Blitz Machine Learning competition](https://contest.yandex.ru/contest/8470) held in the end of June, 2018.
 
-Quick jump to:
+Quickly jump to:
 - [A. Stump](#a-stump)
 - [B. Coefficients restoration](#b-coefficients-restoration)
 - [C. Freshness detector](#c-freshness-detector)
@@ -338,6 +338,7 @@ Then incremental update rule will be:
 $$
 x^{(i+1)} = x^{(i)} - \alpha\nabla_x J(x^{(i)}, t)
 $$
+
 Implementation: [p.ipynb](p.ipynb)
 
 # Q. Adversarial attack (black-box)
