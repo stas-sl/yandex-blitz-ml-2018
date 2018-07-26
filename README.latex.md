@@ -264,6 +264,8 @@ Implementation: [n.py](n.py)
 
 # O. SVD recommender
 
+![o](assets/o.svg)
+
 This task is classical recommender system. It is well known since Netflix competition in 2006-2009. One
 of the competitors Simon Funk has [really nice description](http://sifter.org/simon/journal/20061211.html) of his method that uses SGD to find matrix factorization. It is good, because we don't need to deal with huge sparse matrices.
 
