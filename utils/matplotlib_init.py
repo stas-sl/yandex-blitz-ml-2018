@@ -6,7 +6,7 @@ from cycler import cycler
 get_ipython().run_line_magic('matplotlib', 'inline')
 get_ipython().run_line_magic('config', "InlineBackend.figure_format = 'retina'")
 
-colors = ['#388EF3', '#FF9649']
+colors = ['#388EF3', '#FF9649', '#359E53']
 
 params = {
     'figure.facecolor': '#D3C8FF',

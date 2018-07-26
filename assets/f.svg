@@ -1,6 +1,6 @@
-<svg width="621" height="386" viewBox="0 0 621 386" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="620" height="380" viewBox="0 0 620 380" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0)">
-<rect width="621" height="386" fill="#D3C8FF"/>
+<rect width="620" height="380" fill="#D3C8FF"/>
 <line y1="-0.5" x2="386" y2="-0.5" transform="rotate(90)" stroke="#C0AAEF"/>
 <line y1="-0.5" x2="386" y2="-0.5" transform="translate(27) rotate(90)" stroke="#C0AAEF"/>
 <line y1="-0.5" x2="386" y2="-0.5" transform="translate(54) rotate(90)" stroke="#C0AAEF"/>
@@ -60,7 +60,7 @@
 </g>
 <defs>
 <clipPath id="clip0">
-<rect width="621" height="386" fill="white"/>
+<rect width="620" height="380" fill="white"/>
 </clipPath>
 </defs>
 </svg>

@@ -125,7 +125,7 @@ After we obtain coefficients of scoring model we can use them to score all resta
 
 Another very important detail worth mentioning is rating and distance transformations before training. If we plot distance and ratings distributions we might notice that there are a lot of small distances near zero and ratings are concentrated around 7-8. Logically, users might be much more sensitive to difference between 100 meters and 1 km than 100km and 101 km. On the contrary low ratings 2 or 3 are percieved as almost equally poor, while difference between 8 and 9 rating feels more important. In order to take this into account, we might try to apply log transformation to distances and exponential transformation to ratings. Indeed, the model without any transformations scored 1.5 on the leaderboard, when using only distance transformation score raised up to 3.5, and after we applied both transformation we achieved max score of 4 points.
 
-![h](assets/h.png)
+![h](assets/h.svg)
 
 Implementation: [h_exploration.ipynb](h_exploration.ipynb), [h.py](h.py)
 
