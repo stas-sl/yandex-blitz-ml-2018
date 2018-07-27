@@ -166,6 +166,8 @@ Implementation: [i.ipynb](i.ipynb)
 
 # J. Linear separability problem
 
+![j](assets/j.gif)
+
 The task is given a set of points $X=\{x_1, x_2, ..., x_n\},\ x_i \in \mathbb{R}^m$ and their respective classes $Y=\{y_1, y_2, ..., y_n\},\ y_i \in \{-1, +1\}$ to find a hyperplane separating those points according to their classes. Formally, find such a vector $a \in \mathbb{R}^m$ that:
 
 $$

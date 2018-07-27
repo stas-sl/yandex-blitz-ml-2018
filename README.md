@@ -158,6 +158,8 @@ Implementation: [i.ipynb](i.ipynb)
 
 # J. Linear separability problem
 
+![j](assets/j.gif)
+
 The task is given a set of points <img src="assets/9516deb02a4c8362bc9b12a69f6b87cb.svg" align=middle width=237.7464563pt height=27.646325999999984pt/> and their respective classes <img src="assets/0639f95b687db1c9499938d0e983f9f5.svg" align=middle width=277.1705668pt height=27.646325999999984pt/> to find a hyperplane separating those points according to their classes. Formally, find such a vector <img src="assets/08d68c5754b303eac3b4d98eb1598a65.svg" align=middle width=58.65881394999999pt height=25.393651300000002pt/> that:
 
 <p align="center"><img src="assets/05d473830075ef5f0eccaaf54c7a8456.svg" align=middle width=271.40544325pt height=66.3518299pt/></p>
