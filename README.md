@@ -30,9 +30,9 @@ Quickly jump to:
 
 The are 3 important observations here:
 
-1. All possible candidates for split (i.e. **c** value) are all points in the middle of 2 consecutive $X$ coordinates (dashed lines in the image). So we have to check only $n-1$ variants (or less if some points have equal $X$ coordinates).
-2. If we fix **c** then optimal values for **a** and **b** that minimize MSE would be just mean of $Y$ coordinates of all points on each side of the split.
-3. If we will naively calculate mean for each split by iterating over all points we'll get $O(N^2)$ complexity which will not work, so instead we should sort all points by $X$ and then store sums of $Y$ and $Y^2$ for left and right sides of current split. Then going to next $X$ we can update those sums only by value of points that change side. Thus we will be able to easily compute mean as well as MSE for both sides and find split that minimizes MSE in $O(N)$, though overall complexity will be $O(N \log N)$ due to sorting.
+1. All possible candidates for split (i.e. **c** value) are all points in the middle of 2 consecutive <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> coordinates (dashed lines in the image). So we have to check only <img src="assets/efcf8d472ecdd2ea56d727b5746100e3.svg" align=middle width=42.80482639999999pt height=23.755361600000015pt/> variants (or less if some points have equal <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> coordinates).
+2. If we fix **c** then optimal values for **a** and **b** that minimize MSE would be just mean of <img src="assets/91aac9730317276af725abd8cef04ca9.svg" align=middle width=14.795948499999989pt height=25.188841500000024pt/> coordinates of all points on each side of the split.
+3. If we will naively calculate mean for each split by iterating over all points we'll get <img src="assets/c3f65f86f2baa7f28840d7c68c00f5f2.svg" align=middle width=53.9922907pt height=30.005601399999982pt/> complexity which will not work, so instead we should sort all points by <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> and then store sums of <img src="assets/91aac9730317276af725abd8cef04ca9.svg" align=middle width=14.795948499999989pt height=25.188841500000024pt/> and <img src="assets/6e9fb305c704f8322e39f6132d0468fe.svg" align=middle width=22.142735099999992pt height=30.005601399999982pt/> for left and right sides of current split. Then going to next <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> we can update those sums only by value of points that change side. Thus we will be able to easily compute mean as well as MSE for both sides and find split that minimizes MSE in <img src="assets/e7a2f022962441f2be6dc8e70e837b4a.svg" align=middle width=45.72395804999999pt height=27.646325999999984pt/>, though overall complexity will be <img src="assets/2a614f0f77ff651ee3f7ab0f114a1a1d.svg" align=middle width=92.4921782pt height=27.646325999999984pt/> due to sorting.
 
 Implementation: [a.py](a.py)
 
@@ -40,9 +40,7 @@ Implementation: [a.py](a.py)
 
 Let's ignore noise and define the following function (MSE):
 
-$$
-F(a, b, c) = \sum_{i=1}^n\left((a\sin x_i + b\ln x_i)^2+c x_i^2 - y_i^2\right)^2
-$$
+<p align="center"><img src="assets/dc1154838a80353a1d3610a809aa9dba.svg" align=middle width=385.46306960000004pt height=50.33949715000001pt/></p>
 
 To find coefficients *a*, *b* and *c* we minimize this function using `scipy.optimize.minimize`.
 
@@ -59,7 +57,7 @@ That is pretty straightforward classification problem. Though there are 2 questi
 
 After we decided on these questions we can feed the data into a classifier. I used **lightgbm** for this purposes because it works well with sparse features and is very fast.
 
-The last thing to note is that usage of query features is important for this task because without them we can only get $F_1=0.17$, which is not enough, but when we add query information we can get $F_1=0.28$.
+The last thing to note is that usage of query features is important for this task because without them we can only get <img src="assets/a4d98285c4b44ddc302e89d6858f3a77.svg" align=middle width=77.46089119999999pt height=25.188841500000024pt/>, which is not enough, but when we add query information we can get <img src="assets/4ee778f5b39cbea54f35d4284a13b806.svg" align=middle width=77.46089119999999pt height=25.188841500000024pt/>.
 
 Implementation: [c.ipynb](c.ipynb)
 
@@ -87,15 +85,13 @@ This problem looks less like machine learning problem but more like traditional 
 
 Let's recall the formula for generalized AUC:
 
-$$
-AUC_{generalized}=\frac{\sum\limits_{i,\ j:\ t_i>t_j}\left([y_i>y_j] + \frac{1}{2}[y_i=y_j]\right)}{\left|\{i,j: t_i>t_j\}\right|}
-$$
+<p align="center"><img src="assets/e457cd2630a616fa81d566621747dcb5.svg" align=middle width=403.5843709pt height=62.464926250000005pt/></p>
 
-The naive solution would be to go over all pairs of $i$ and $j$ and just calculate cases when $t_i > t_j$ and $y_i > y_j$, though the complexity will be $O(N^2)$ and we'll get TL for $N=10^6$. So we need something smarter.
+The naive solution would be to go over all pairs of <img src="assets/77a3b857d53fb44e33b53e4c8b68351a.svg" align=middle width=6.349677299999989pt height=24.311253299999994pt/> and <img src="assets/36b5afebdba34564d884d347484ac0c7.svg" align=middle width=8.645012999999988pt height=24.311253299999994pt/> and just calculate cases when <img src="assets/50a4d4d808e63c013645de93b95e08ca.svg" align=middle width=50.866177349999994pt height=22.672930299999983pt/> and <img src="assets/1d79dc63628f7df562d6d4a19ac118f9.svg" align=middle width=55.62759265pt height=19.872096900000006pt/>, though the complexity will be <img src="assets/c3f65f86f2baa7f28840d7c68c00f5f2.svg" align=middle width=53.9922907pt height=30.005601399999982pt/> and we'll get TL for <img src="assets/b5b9788de90f0b9dfb14ed2d64708bb8.svg" align=middle width=67.17020885pt height=30.005601399999982pt/>. So we need something smarter.
 
-Let's try to put those points on a plane: $t_i$ on $X$-axis, and $y_i$ on $Y$-axis. Thus going from left to right on X-axis for fixed $X=t_i$ all points to the left will have $t_j < t_i$ and we just need to calculate number of points that also have $y_j < y_i$ among them. Geometrically this means that we should calculate number of points in rectangle $(0, 0, t_i, y_i)$, of course we should not forget to consider cases when $y_j = y_i$ - points that lie on the top border of the rectangle. Naively calculating points inside this rectangle still requires $O(N^2)$, so we should somehow organize our points to be able to quickly answer the question "how many points are there which have $t_j < t_i$ and $y_j < y_i$". To do so, we will store all $y_j$ of points that lie to the left of $X=t_i$ in a sorted array or a binary tree. Initially this array will be empty, but as we go from the left to the right along the $X$-axis we'll add points there. Notice, that we don't care about specific $X$-coordinates of points in this array. All we need to know is that their $X$-coordinate is less than current $X=t_i$. So, if we have such sorted array/bin tree, then we can easily answer to the required question in $O(\log N)$ time doing binary search. The only question to cover yet is how much time do we need to insert new points into our array/bin tree. In case of sorted array if we insert some elements in the middle of it we might need to shift all other elements to the right of it, so we might need $O(N)$ in worst case. In case of binary tree, if the tree is balanced insertion will take $O(\log N)$ time, though if it is not we'll end up with $O(N)$ still. Let's hope we will be lucky and the order of elements will be random, so the tree will be quite balanced.
+Let's try to put those points on a plane: <img src="assets/02ab12d0013b89c8edc7f0f2662fa7a9.svg" align=middle width=11.870269699999989pt height=22.672930299999983pt/> on <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/>-axis, and <img src="assets/2b442e3e088d1b744730822d18e7aa21.svg" align=middle width=14.250977349999992pt height=15.871031600000025pt/> on <img src="assets/91aac9730317276af725abd8cef04ca9.svg" align=middle width=14.795948499999989pt height=25.188841500000024pt/>-axis. Thus going from left to right on X-axis for fixed <img src="assets/7d4058a1e5678e1dc8e8a21ba778b29c.svg" align=middle width=53.160360499999996pt height=25.188841500000024pt/> all points to the left will have <img src="assets/aea1accf0ad68965a6a7179a094f2c57.svg" align=middle width=50.86617364999999pt height=22.672930299999983pt/> and we just need to calculate number of points that also have <img src="assets/fb7c214da6059aa80d0a6685a8e8f025.svg" align=middle width=55.62758894999999pt height=19.872096900000006pt/> among them. Geometrically this means that we should calculate number of points in rectangle <img src="assets/09b1a71bfd74646f4aeca7a17736f531.svg" align=middle width=85.30475985pt height=27.646325999999984pt/>, of course we should not forget to consider cases when <img src="assets/a96c3bf71e0d8dd09b9535b7a3716ad3.svg" align=middle width=55.62758894999999pt height=15.871031600000025pt/> - points that lie on the top border of the rectangle. Naively calculating points inside this rectangle still requires <img src="assets/c3f65f86f2baa7f28840d7c68c00f5f2.svg" align=middle width=53.9922907pt height=30.005601399999982pt/>, so we should somehow organize our points to be able to quickly answer the question "how many points are there which have <img src="assets/aea1accf0ad68965a6a7179a094f2c57.svg" align=middle width=50.86617364999999pt height=22.672930299999983pt/> and <img src="assets/fb7c214da6059aa80d0a6685a8e8f025.svg" align=middle width=55.62758894999999pt height=19.872096900000006pt/>". To do so, we will store all <img src="assets/fba353e8e83ce14fc4a80553757972f7.svg" align=middle width=15.880781099999991pt height=15.871031600000025pt/> of points that lie to the left of <img src="assets/7d4058a1e5678e1dc8e8a21ba778b29c.svg" align=middle width=53.160360499999996pt height=25.188841500000024pt/> in a sorted array or a binary tree. Initially this array will be empty, but as we go from the left to the right along the <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/>-axis we'll add points there. Notice, that we don't care about specific <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/>-coordinates of points in this array. All we need to know is that their <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/>-coordinate is less than current <img src="assets/7d4058a1e5678e1dc8e8a21ba778b29c.svg" align=middle width=53.160360499999996pt height=25.188841500000024pt/>. So, if we have such sorted array/bin tree, then we can easily answer to the required question in <img src="assets/75ff77642a7a68c66eacceb8a0740bba.svg" align=middle width=72.6022917pt height=27.646325999999984pt/> time doing binary search. The only question to cover yet is how much time do we need to insert new points into our array/bin tree. In case of sorted array if we insert some elements in the middle of it we might need to shift all other elements to the right of it, so we might need <img src="assets/e7a2f022962441f2be6dc8e70e837b4a.svg" align=middle width=45.72395804999999pt height=27.646325999999984pt/> in worst case. In case of binary tree, if the tree is balanced insertion will take <img src="assets/75ff77642a7a68c66eacceb8a0740bba.svg" align=middle width=72.6022917pt height=27.646325999999984pt/> time, though if it is not we'll end up with <img src="assets/e7a2f022962441f2be6dc8e70e837b4a.svg" align=middle width=45.72395804999999pt height=27.646325999999984pt/> still. Let's hope we will be lucky and the order of elements will be random, so the tree will be quite balanced.
 
-I ended up with several implementations for this task using C++ and Python and trying sorted array/binary tree. Though sorted array required $O(N^2)$ time it surprisingly didn't get TL even using Python implementation. But it was very-very close to it. Binary tree version of solution was much faster using C++ implementation and took only *125ms* for the longest test case. But Python version of it was quite slow, even slower than sorted array version, so it exceeded the TL.
+I ended up with several implementations for this task using C++ and Python and trying sorted array/binary tree. Though sorted array required <img src="assets/c3f65f86f2baa7f28840d7c68c00f5f2.svg" align=middle width=53.9922907pt height=30.005601399999982pt/> time it surprisingly didn't get TL even using Python implementation. But it was very-very close to it. Binary tree version of solution was much faster using C++ implementation and took only *125ms* for the longest test case. But Python version of it was quite slow, even slower than sorted array version, so it exceeded the TL.
 
 Implementation: [f_naive.cpp](f_naive.cpp), [f_sorted_naive.cpp](f_sorted_naive.cpp), [f_fastest.cpp](f_fastest.cpp), [f_sorted_naive.py](f_sorted_naive.py)
 
@@ -117,15 +113,11 @@ Implementation: [g.ipynb](g.ipynb)
 
 We will use a simple linear model with 2 coefficients to predict restaurant score based on distance and rating:
 
-$$
-score_i = w_1 r_i + w_2 d_i
-$$
+<p align="center"><img src="assets/61fb1b29365a17ebd35401f07e228426.svg" align=middle width=168.38135195pt height=15.563833550000002pt/></p>
 
 We may notice that the expression we are asked to minimize is exactly the negative log likelihood (divided by constant *N*) or loss function of logistic regression:
 
-$$
-J(w_1, w_2) = \frac{1}{N}\sum_{k=1}^N \ln(1 + e^{score_{looser_k} - score_{winner_k}})
-$$
+<p align="center"><img src="assets/8370200341c3c39d2d5782932bba2bec.svg" align=middle width=405.8355249pt height=54.02313945pt/></p>
 
 Because logistic regression requires only labels 0 or 1 and target metric will be evaluated on pairs with known winner and looser, we will omit samples with ties (0.5 target) during training. To solve logistic regression we will use SGD.
 
@@ -160,7 +152,7 @@ We see that features 5 and 95 are the most important ones. Let's look at them an
 | 8    | 0    | 1    | 1           |
 | 9    | 0    | 1    | 1           |
 
-Looks like XOR: $target = feature_5 \oplus feature_{95}$. Double-checking on the whole dataset confirms our hypothesis.
+Looks like XOR: <img src="assets/14279deb74124feae51cac1eb8dee83f.svg" align=middle width=247.87254230000005pt height=25.59845739999999pt/>. Double-checking on the whole dataset confirms our hypothesis.
 
 Implementation: [i.ipynb](i.ipynb)
 
@@ -168,25 +160,19 @@ Implementation: [i.ipynb](i.ipynb)
 
 ![j](assets/j.gif)
 
-The task is given a set of points $X=\{x_1, x_2, ..., x_n\},\ x_i \in \mathbb{R}^m$ and their respective classes $Y=\{y_1, y_2, ..., y_n\},\ y_i \in \{-1, +1\}$ to find a hyperplane separating those points according to their classes. Formally, find such a vector $a \in \mathbb{R}^m$ that:
+The task is given a set of points <img src="assets/9516deb02a4c8362bc9b12a69f6b87cb.svg" align=middle width=237.7464563pt height=27.646325999999984pt/> and their respective classes <img src="assets/0639f95b687db1c9499938d0e983f9f5.svg" align=middle width=277.1705668pt height=27.646325999999984pt/> to find a hyperplane separating those points according to their classes. Formally, find such a vector <img src="assets/08d68c5754b303eac3b4d98eb1598a65.svg" align=middle width=58.65881394999999pt height=25.393651300000002pt/> that:
 
-$$
-sign\left(\sum_{j=1}^m a_{j}x_{ij}\right) = y_i,\  1 \leq  i\leq  n
-$$
+<p align="center"><img src="assets/05d473830075ef5f0eccaaf54c7a8456.svg" align=middle width=271.40544325pt height=66.3518299pt/></p>
 
 Although there are a few linear models that might be applicable to this task, namely linear/logistic regression, SVM, perceptron, not all of them will find a hyperplane that splits all points exactly. This can happen if, according to the respective loss function, it is 'cheaper' to misclassify a single point, but the total loss for other points will be less. Though it doesn't apply to the perceptron model - it tries to find separating hyperplane, that splits the classes exactly, if it is possible, but if not it will never converge. In the task statement it is said that the input dataset is known to be linearly separable, so we can use the perceptron here. During training only points that are misclassified contribute to the error, so if a point was already classified correctly it doesn't matter how far it is from decision boundary, so we may end up with decision boundary being very close to some of training points, but in our task that is acceptable, as we don't have any other requrements for the hyperplane.
 
-The perceptron model has $m$ parameters $a=(a_1, a_2, ..., a_m)$ and maps the input vector $x_i$ to the output class $y_i$:
+The perceptron model has <img src="assets/0e51a2dede42189d77627c4d742822c3.svg" align=middle width=16.18256789999999pt height=15.871031600000025pt/> parameters <img src="assets/31de31d2aa8a24f524564ad3fb7914bc.svg" align=middle width=148.34946499999998pt height=27.646325999999984pt/> and maps the input vector <img src="assets/9fc20fb1d3825674c6a279cb0d5ca636.svg" align=middle width=15.74841914999999pt height=15.871031600000025pt/> to the output class <img src="assets/2b442e3e088d1b744730822d18e7aa21.svg" align=middle width=14.250977349999992pt height=15.871031600000025pt/>:
 
-$$
-f(x_i) = sign\left(\sum_{j=1}^m a_{j}x_{ij}\right) = y_i
-$$
+<p align="center"><img src="assets/f32523c1fbf4fe3d2a003130780dbc7f.svg" align=middle width=246.959053pt height=66.3518299pt/></p>
 
-In order to find the parameters of vector $a$, an iterative update rule is used:
+In order to find the parameters of vector <img src="assets/44bc9d542a92714cac84e01cbbb7fd61.svg" align=middle width=9.74238489999999pt height=15.871031600000025pt/>, an iterative update rule is used:
 
-$$
-a^{(k+1)} = a^{(k)} + lr \cdot X^T (Y - \hat Y),\ \text{where}\ \hat Y = sign(a^{(k)} X^T) \text{ - current prediction}
-$$
+<p align="center"><img src="assets/2e90101bb57dc32f618881690607d249.svg" align=middle width=628.1722008500001pt height=22.06585465pt/></p>
 
 Despite linear/logistic regression might not always find separating hyperplane correctly, my solutions using both of them were accepted - probably the tests were not so hard and the points were separated by a wide margin.
 
@@ -226,25 +212,21 @@ Implementation: [l.ipynb](l.ipynb)
 
 # M. Pairwise ranking
 
-This task might look similar to [H. Restaurants](#h-restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each $i$-th object's score as a parameter/weight $f(a_i)=w_i$. 
+This task might look similar to [H. Restaurants](#h-restaurants). The training dataset here is also composed of pairs of items and we are asked to maximize log likelihood of the data. Though, unlike task H, here we don't have any features of objects that can be used as input to scoring model, so instead we will consider each <img src="assets/77a3b857d53fb44e33b53e4c8b68351a.svg" align=middle width=6.349677299999989pt height=24.311253299999994pt/>-th object's score as a parameter/weight <img src="assets/73cff7830c7881710ad86fddbe27bb4c.svg" align=middle width=84.2050884pt height=27.646325999999984pt/>. 
 
 Thus our task can rewritten as:
 
-$$
-\sigma(w_{a_{i1}}-w_{a_{i2}}) = 1,\ i=1...m,\text{ where }\sigma(x) = \frac{1}{1+e^{-x}}\text{ - sigmoid function }
-$$
+<p align="center"><img src="assets/7e5ccf04b2f3a6b4c5c2fc80a7a171b5.svg" align=middle width=582.27460365pt height=38.5248921pt/></p>
 
 Or in vectorized form:
 
-$$
-\sigma(Xw^T) = \mathbf{1}
-$$
+<p align="center"><img src="assets/2fcf8e9215cffe44a804684a8abac421.svg" align=middle width=102.71766840000001pt height=21.0338081pt/></p>
 
-Where $w=(w_1, w_2, ..., w_n)$ - vector of all objects' scores and $X$ - is $m\times n$ design matrix, where each row contains only 2 non-zero elements, namely $x_{i,a_{i1}}=1$ and $x_{i,a_{i2}}=-1$ for all $i=1...m$.
+Where <img src="assets/6feb3bad07ddeea39e0e6487b370ddd2.svg" align=middle width=158.6880827pt height=27.646325999999984pt/> - vector of all objects' scores and <img src="assets/cbfb1b2a33b28eab8a3e59464768e810.svg" align=middle width=16.715802649999993pt height=25.188841500000024pt/> - is <img src="assets/63b142315f480db0b3ff453d62cc3e7f.svg" align=middle width=49.77191529999999pt height=21.5027202pt/> design matrix, where each row contains only 2 non-zero elements, namely <img src="assets/e33baa1a785610766d8c96a85ea0d929.svg" align=middle width=74.94207365pt height=23.755361600000015pt/> and <img src="assets/a6b6803e79a52d9c48fbe3a16bbbed28.svg" align=middle width=89.27725745pt height=23.755361600000015pt/> for all <img src="assets/f68112419890e1aaee4b3945368ad473.svg" align=middle width=71.68115264999999pt height=24.311253299999994pt/>.
 
-There is always $1$ on the right side of equation because first object $a_{i1}$ is always preferred over the second $a_{i2}$.
+There is always <img src="assets/034d0a6be0424bffe9a6e7ac9236c0f5.svg" align=middle width=9.215477149999991pt height=23.755361600000015pt/> on the right side of equation because first object <img src="assets/23a9f1f890788fca12299080b7ddeeb9.svg" align=middle width=22.30382384999999pt height=15.871031600000025pt/> is always preferred over the second <img src="assets/91cfda11becf7d409e7826d26965b2e0.svg" align=middle width=22.30382384999999pt height=15.871031600000025pt/>.
 
-After those preparations we can just fit logistic regression to obtain scores $w_i$.
+After those preparations we can just fit logistic regression to obtain scores <img src="assets/c2a29561d89e139b3c7bffe51570c3ce.svg" align=middle width=18.40963859999999pt height=15.871031600000025pt/>.
 
 Implementation: [m.py](m.py)
 
@@ -252,17 +234,15 @@ Implementation: [m.py](m.py)
 
 ![n](assets/n.svg)
 
-Well, the first straightforward idea was simply to calculate frequency of getting heads up $\frac{m_i}{k_i}$ and sort coins by this number. But, unfortunately, it didn't work. The problem is that if we have 2 coins $i$ and $j$ with $m_i=0, k_i=1$ and $m_j=0, k_j=50$ then we will get $\frac{0}{1}=\frac{0}{50}=0$. Which means that we will consider both of the coins to have equally low chance of getting heads up $p_i=p_j=0$. Though, intuitively, of course, it doesn't seem right: if we toss a coin only single time and didn't get heads up, we shouldn't be so confident that we will never get it at all, though if we didn't get a single heads up after 50 tosses, well, chances to get a one are really low. At this point we should probably start to realize that Bayesian statistics was invented for a reason. 
+Well, the first straightforward idea was simply to calculate frequency of getting heads up <img src="assets/bffefda2b7e31010aac1f05438156f1a.svg" align=middle width=18.9173896pt height=26.222958199999997pt/> and sort coins by this number. But, unfortunately, it didn't work. The problem is that if we have 2 coins <img src="assets/77a3b857d53fb44e33b53e4c8b68351a.svg" align=middle width=6.349677299999989pt height=24.311253299999994pt/> and <img src="assets/36b5afebdba34564d884d347484ac0c7.svg" align=middle width=8.645012999999988pt height=24.311253299999994pt/> with <img src="assets/cf377df1cda8314d1a503e6c1b83ba72.svg" align=middle width=113.82111865pt height=25.59845739999999pt/> and <img src="assets/170dbe8c5612c56a7ce62f6dab302a13.svg" align=middle width=126.2961996pt height=25.59845739999999pt/> then we will get <img src="assets/eb6a85f7ef7ac49a13a97219e8627d42.svg" align=middle width=87.0395733pt height=31.14240049999998pt/>. Which means that we will consider both of the coins to have equally low chance of getting heads up <img src="assets/88fdf1bf393110b9b577366c6fe9bd53.svg" align=middle width=90.812356pt height=23.755361600000015pt/>. Though, intuitively, of course, it doesn't seem right: if we toss a coin only single time and didn't get heads up, we shouldn't be so confident that we will never get it at all, though if we didn't get a single heads up after 50 tosses, well, chances to get a one are really low. At this point we should probably start to realize that Bayesian statistics was invented for a reason. 
 
-Unfortunately my understanding of Bayessian statistics not as profound as I'd like, but the idea is that instead of estimating a single number $p_i$ we deal with whole distibution of all possible values of $p_i$. In order to do this, we choose some plausible prior distribution, which in case if we don't have any specific information, we may choose as $U(0, 1)$ - standard uniform distibution, i.e. all $p_i$ are equally likely. Then after each toss we update the resulting distribution (a posteori) according to the observed outcome, thus the initial distibution is gradually shifting towards the true distribution. In the end to be able to compare a posteori distribution of different coins, we still have to come up to a single number (point estimate), but this time we  have some options how to calculate it from whole distibution. The most common approaches are to select mode (maximum a posteori) or mean (expected value) of the distibution. Intuitively expected value contains more information about the distribution because it is integral over all possible values, while maximum value is just a single point. So we'll use mean of the distribution as its point estimate.
+Unfortunately my understanding of Bayessian statistics not as profound as I'd like, but the idea is that instead of estimating a single number <img src="assets/0d19b0a4827a28ecffa01dfedf5f5f2c.svg" align=middle width=14.48770519999999pt height=15.871031600000025pt/> we deal with whole distibution of all possible values of <img src="assets/0d19b0a4827a28ecffa01dfedf5f5f2c.svg" align=middle width=14.48770519999999pt height=15.871031600000025pt/>. In order to do this, we choose some plausible prior distribution, which in case if we don't have any specific information, we may choose as <img src="assets/7a2a4464adb558e31e86e4e9f6b2c5e0.svg" align=middle width=55.55121169999999pt height=27.646325999999984pt/> - standard uniform distibution, i.e. all <img src="assets/0d19b0a4827a28ecffa01dfedf5f5f2c.svg" align=middle width=14.48770519999999pt height=15.871031600000025pt/> are equally likely. Then after each toss we update the resulting distribution (a posteori) according to the observed outcome, thus the initial distibution is gradually shifting towards the true distribution. In the end to be able to compare a posteori distribution of different coins, we still have to come up to a single number (point estimate), but this time we  have some options how to calculate it from whole distibution. The most common approaches are to select mode (maximum a posteori) or mean (expected value) of the distibution. Intuitively expected value contains more information about the distribution because it is integral over all possible values, while maximum value is just a single point. So we'll use mean of the distribution as its point estimate.
 
-That was an overall justification, now let's get to our task. According to wikipedia articles [Checking whether a coin is fair](https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair) and [Beta distribution](https://en.wikipedia.org/wiki/Beta_distribution) we know that the a posterior distribution of $p_i$ after getting $h_i=m_i$ heads and $t_i=k_i-m_i$ tails is in fact a $Beta$ distribution: $p_i \sim Beta(h_i + 1, t_i + 1) = Beta(m_i+1, k_i-m_i+1)$ with probability density function:
+That was an overall justification, now let's get to our task. According to wikipedia articles [Checking whether a coin is fair](https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair) and [Beta distribution](https://en.wikipedia.org/wiki/Beta_distribution) we know that the a posterior distribution of <img src="assets/0d19b0a4827a28ecffa01dfedf5f5f2c.svg" align=middle width=14.48770519999999pt height=15.871031600000025pt/> after getting <img src="assets/a157a419f4d70215e97230c8bfe59bb8.svg" align=middle width=62.726819649999996pt height=25.59845739999999pt/> heads and <img src="assets/684b9ab190097118dc7494cc56ce8a18.svg" align=middle width=97.02116319999999pt height=25.59845739999999pt/> tails is in fact a <img src="assets/57500b0520bf2dc4f1978141f7f782fc.svg" align=middle width=39.88464764999999pt height=25.188841500000024pt/> distribution: <img src="assets/5f10e1a3673762981a9e3a8876883f25.svg" align=middle width=428.79065605pt height=27.646325999999984pt/> with probability density function:
 
-$$
-f(p_i\ \mid\ H=h_i,T=t_i)=\frac{p_i^{h_i} (1-p_i)^{t_i}}{B(h_i+1, t_i+1)}\text{, where } B(\alpha, \beta)\text{ - is }Beta\text{ function}
-$$
+<p align="center"><img src="assets/c247306cd4d9f509fbe04084f687c4fa.svg" align=middle width=619.1771327pt height=46.8699461pt/></p>
 
-From the properties of $Beta$ distribution we know that its expected value is $\frac{\alpha}{\alpha+\beta}=\frac{m_i+1}{k_i+2}$, while its mode is $\frac{\alpha-1}{\alpha + \beta -2} = \frac{m_i}{k_i}$. So if we would use mode instead of mean we would get the same results as our initial idea that didn't work.
+From the properties of <img src="assets/57500b0520bf2dc4f1978141f7f782fc.svg" align=middle width=39.88464764999999pt height=25.188841500000024pt/> distribution we know that its expected value is <img src="assets/8a0e49c8ec3a0dd45ee07822d28a29e3.svg" align=middle width=96.49313435pt height=31.7419892pt/>, while its mode is <img src="assets/1e09657fbd3f90d78db722b284d92fde.svg" align=middle width=96.6978868pt height=31.14240049999998pt/>. So if we would use mode instead of mean we would get the same results as our initial idea that didn't work.
 
 Implementation: [n.py](n.py)
 
@@ -277,28 +257,21 @@ Another useful resource was [suprise](http://surpriselib.com/) library. It does 
 it has convenient methods to get sample data for testing purposes. We will try to implement our own algorithm
 to find matrix factorization and compare the results with those received using this library.
 
-The algorithm is pretty straightforward. The [idea](http://surprise.readthedocs.io/en/stable/matrix_factorization.html#surprise.prediction_algorithms.matrix_factorization.SVD) is to represent ratings as $\hat{r}_{um} = \mu + b_u + b_m + q_m^Tp_u$
+The algorithm is pretty straightforward. The [idea](http://surprise.readthedocs.io/en/stable/matrix_factorization.html#surprise.prediction_algorithms.matrix_factorization.SVD) is to represent ratings as <img src="assets/d42d1a09987f1cb87139da3ec00b2aad.svg" align=middle width=213.960418pt height=31.0090858pt/>
 
 Where:
 
-$b_u$ - per user average rating minus global average, vector of size $U$<br>
-$b_m$ - per movie average rating minus global average, vector of size $M$<br>
-$p_u$ - user embedding, vector of size $d$ (number of factors)<br>
-$q_m$ - movie embedding, vector of size $d$ (number of factors)<br>
+<img src="assets/f7115ca4804f002d341b17739b30a8a2.svg" align=middle width=16.624153649999993pt height=25.59845739999999pt/> - per user average rating minus global average, vector of size <img src="assets/6bac6ec50c01592407695ef84f457232.svg" align=middle width=14.59365284999999pt height=25.188841500000024pt/><br>
+<img src="assets/f8fd3079e1d6ddd6a40ffb421d3e5ed1.svg" align=middle width=20.988693999999988pt height=25.59845739999999pt/> - per movie average rating minus global average, vector of size <img src="assets/fb97d38bcc19230b0acd442e17db879c.svg" align=middle width=19.89000859999999pt height=25.188841500000024pt/><br>
+<img src="assets/13086b9ea21e25dc5977f88758215527.svg" align=middle width=17.98729099999999pt height=15.871031600000025pt/> - user embedding, vector of size <img src="assets/2103f85b8b1477f430fc407cad462224.svg" align=middle width=9.59305104999999pt height=25.59845739999999pt/> (number of factors)<br>
+<img src="assets/001683f492003af3c5898ea899494eb0.svg" align=middle width=21.30657579999999pt height=15.871031600000025pt/> - movie embedding, vector of size <img src="assets/2103f85b8b1477f430fc407cad462224.svg" align=middle width=9.59305104999999pt height=25.59845739999999pt/> (number of factors)<br>
 
 We initialize these variables with some random values and then iterate over each known user-movie-raiting tuples and compute 
 error. Then we update just a little bit all parameters to minimize the error:
 
-\begin{equation*}
-\begin{split}
-b_u & \leftarrow  b_u + \gamma (e_{um} - \lambda b_u)\\
-b_m & \leftarrow  b_m + \gamma (e_{um} - \lambda b_m)\\
-p_u & \leftarrow  p_u + \gamma (e_{um} \cdot q_m - \lambda p_u) \\
-q_m & \leftarrow  q_m + \gamma (e_{um} \cdot p_u - \lambda q_m)
-\end{split}
-\end{equation*}
+<p align="center"><img src="assets/acf0e13f23be91d60bb822910780b719.svg" align=middle width=239.57638750000004pt height=101.36986385000002pt/></p>
 
-Where $e_{um} = r_{um} - \hat{r}_{um}$, $\lambda$ - regularization parameter, $\gamma$ - learning rate.
+Where <img src="assets/9be29c69a1e76559ef3b12be5c5f459b.svg" align=middle width=139.53533055pt height=25.59845739999999pt/>, <img src="assets/fd8be73b54f5436a5cd2e73ba9b6bfa9.svg" align=middle width=10.751395249999991pt height=25.59845739999999pt/> - regularization parameter, <img src="assets/11c596de17c342edeed29f489aa4b274.svg" align=middle width=10.566169549999989pt height=15.871031600000025pt/> - learning rate.
 
 Implementation: [o_test.ipynb](o_test.ipynb), [o.py](o.py)
 
@@ -310,43 +283,21 @@ The idea is to start with the source image and incrementally update it a little 
 
 The loss function that we are going to minimize is:
 
-\begin{equation*}
-\begin{split}
-J(x,t) & =-\log P(y=t \mid x) + \lambda (x - \bar x)^T(x - \bar x) \\
-       & =-\log s_t + \lambda (x - \bar x)^T(x - \bar x) \\
-       & =-\log \frac{e^{w_{t} \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} + \lambda (x - \bar x)^T(x - \bar x)
-\end{split}
-\end{equation*}
+<p align="center"><img src="assets/2a1465ceb2e667bfb0fadb45da84ae23.svg" align=middle width=376.86357215pt height=130.39180915000003pt/></p>
 
-Where $\bar x$ - is original the image, $t$ - target class, $s_j$ - $j$-th output of softmax, $\lambda$ - is regularization parameter. Then partial derivatives will be:
+Where <img src="assets/c97fba47d1059b5c2d3fa5f52768a2a7.svg" align=middle width=10.533774199999991pt height=20.929253500000016pt/> - is original the image, <img src="assets/4f4f4e395762a3af4575de74c019ebb5.svg" align=middle width=6.655624749999991pt height=22.672930299999983pt/> - target class, <img src="assets/227f4d8d12b0de49c4ca84f74fa98023.svg" align=middle width=15.483926499999992pt height=15.871031600000025pt/> - <img src="assets/36b5afebdba34564d884d347484ac0c7.svg" align=middle width=8.645012999999988pt height=24.311253299999994pt/>-th output of softmax, <img src="assets/fd8be73b54f5436a5cd2e73ba9b6bfa9.svg" align=middle width=10.751395249999991pt height=25.59845739999999pt/> - is regularization parameter. Then partial derivatives will be:
 
-\begin{equation*}
-\begin{split}
-\frac{\partial J(x, t)}{\partial x_i} & = \frac{\partial}{\partial x_i}\left(-\log \frac{e^{w_{t} \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} + \lambda (x - \bar x)^T(x - \bar x)\right)\\ 
-  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot x}} - \log e^{w_t \cdot x}\right) + 2\lambda (x_i - \bar x_i) \\
-  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot x}} - w_t \cdot x\right) + 2\lambda (x_i - \bar x_i) \\
-  & = \frac{\partial}{\partial x_i}\left(\log {\sum\limits_{j=1}^{10} e^{w_j \cdot x}}\right) - w_{ti} + 2\lambda (x_i - \bar x_i) \\
-  & = \frac{\frac{\partial}{\partial x_i}\sum\limits_{j=1}^{10} e^{w_j \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
-  & = \frac{\sum\limits_{j=1}^{10} w_{ji}e^{w_j \cdot x}}{\sum\limits_{j=1}^{10} e^{w_j \cdot x}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
-  & = \sum\limits_{j=1}^{10} w_{ji} \frac{e^{w_j \cdot x}}{\sum\limits_{k=1}^{10} e^{w_k \cdot x}} - w_{ti} + 2\lambda (x_i - \bar x_i) \\
-  & = \sum\limits_{j=1}^{10} w_{ji}s_j - w_{ti} + 2\lambda (x_i - \bar x_i) \\
-  & = \sum\limits_{j=1}^{10} w_{ji}(s_j - 1_{j=t}) + 2\lambda (x_i - \bar x_i)
-\end{split}
-\end{equation*}
+<p align="center"><img src="assets/30fdddbcf71e200a82cd233381cd6f45.svg" align=middle width=454.0076675pt height=755.9377426000001pt/></p>
 
 The whole gradient in vector form can be written as:
 
-$$
-\nabla_x J(x, t) = W^T(S - e_t) + 2\lambda(x - \bar x)
-$$
+<p align="center"><img src="assets/b0fc023df9bb92300cc08cb93082221a.svg" align=middle width=297.21883365pt height=21.0338081pt/></p>
 
-Where $S = (s_1, s_2, \dots, s_{10})^T$ - column vector of outputs of softmax, $e_t$ - unit column vector $1\times 10$ where all elements are zeros except $t$-th which is $1$.
+Where <img src="assets/f70e5a55c48604acfb3be95ff3209f30.svg" align=middle width=169.18174150000002pt height=31.0090858pt/> - column vector of outputs of softmax, <img src="assets/71c0437a67c94e48f18cc11d0c17a38c.svg" align=middle width=14.14961769999999pt height=15.871031600000025pt/> - unit column vector <img src="assets/c0f929543ff8b52491172f6b25974c14.svg" align=middle width=50.17291944999999pt height=23.755361600000015pt/> where all elements are zeros except <img src="assets/4f4f4e395762a3af4575de74c019ebb5.svg" align=middle width=6.655624749999991pt height=22.672930299999983pt/>-th which is <img src="assets/034d0a6be0424bffe9a6e7ac9236c0f5.svg" align=middle width=9.215477149999991pt height=23.755361600000015pt/>.
 
 Then incremental update rule will be:
 
-$$
-x^{(i+1)} = x^{(i)} - \alpha\nabla_x J(x^{(i)}, t)
-$$
+<p align="center"><img src="assets/8fde4192a2fad7ec82882fe6d488b15d.svg" align=middle width=228.0022473pt height=21.8939027pt/></p>
 
 Implementation: [p.ipynb](p.ipynb)
 
@@ -358,19 +309,15 @@ There are a few different approaches to do it:
 
 - Use *substitute network* - new model that is trained to give the same answers as black-box model. And then hope that it's gradients are similar to the gradients of original model.
 - Use *finite difference method* to estimate gradient, while being precise it requires as much model evaluations as the dimensions of input image. We have *32x32x3* input image, so there will be *3072* evaluations per iteration. It actually may be acceptable but we'll use another method.
-- *Natural Evolution Strategies (NES)*. This method is well described in the [Black-box Adversarial Attacks with Limited Queries and Information](https://arxiv.org/abs/1804.08598) paper. In short we choose $n$ points in the neighborhood of $x$ and estimate gradient using function values at those points using formula:
+- *Natural Evolution Strategies (NES)*. This method is well described in the [Black-box Adversarial Attacks with Limited Queries and Information](https://arxiv.org/abs/1804.08598) paper. In short we choose <img src="assets/55a049b8f161ae7cfeb0197d75aff967.svg" align=middle width=11.06286124999999pt height=15.871031600000025pt/> points in the neighborhood of <img src="assets/332cc365a4987aacce0ead01b8bdcc0b.svg" align=middle width=10.533774199999991pt height=15.871031600000025pt/> and estimate gradient using function values at those points using formula:
 
-$$
-\nabla_x \mathbf{E}[J(x)] \approx \frac{1}{\sigma n}\sum_{i=1}^{n}\delta_i J(x+\sigma\delta_i)
-$$
+<p align="center"><img src="assets/378250a2c12c428256e808ccff8adc06.svg" align=middle width=268.92129100000005pt height=50.33949715000001pt/></p>
 
-Where $\delta_i \sim N(0, I)$ and $\sigma$ is standard deviation.
+Where <img src="assets/5852701715a58770b77e393ca9c28a7f.svg" align=middle width=97.01044244999999pt height=27.646325999999984pt/> and <img src="assets/8cda31ed38c6d59d14ebefa440099572.svg" align=middle width=11.192949549999991pt height=15.871031600000025pt/> is standard deviation.
 
-Here we don't depend on size of the input image and we can choose $n$ (number of model evaluations) to be *50* or *100*. Then using the estimated gradient we iteratively update image using SGD as in the white-box setting.
+Here we don't depend on size of the input image and we can choose <img src="assets/55a049b8f161ae7cfeb0197d75aff967.svg" align=middle width=11.06286124999999pt height=15.871031600000025pt/> (number of model evaluations) to be *50* or *100*. Then using the estimated gradient we iteratively update image using SGD as in the white-box setting.
 
-$$
-x^{(i+1)} = x^{(i)} - \alpha\nabla_x\mathbf{E} [J(x^{(i)})]
-$$
+<p align="center"><img src="assets/6e511b373a0b32d9f3dc651389067770.svg" align=middle width=237.32007015pt height=21.8939027pt/></p>
 
 ![q](assets/q.svg)
 
